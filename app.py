@@ -65,8 +65,14 @@ def dashboard_page(company_token):
             company["active"] = True
     paid_companies = [
         {"title": "Сбербанк", "active": False, "token": "SBER"},
-        {"title": "Тинькофф", "active": False, "token": "TINK"},
-        {"title": "Яндекс", "active": False, "token": "YNDX"}
+        {"title": "Тинькофф", "active": False, "token": "TCSG"},
+        {"title": "Яндекс", "active": False, "token": "YNDX"},
+        {"title": "Газпром", "active": False, "token": "GAZP"},
+        {"title": "Татнефть", "active": False, "token": "TATN"},
+        {"title": "Мечел", "active": False, "token": "MTLR"},
+        {"title": "Лукойл", "active": False, "token": "LKOH"},
+        {"title": "Аэрофлот", "active": False, "token": "AFLT"},
+        {"title": "Сургутнефтегаз", "active": False, "token": "SNGSP"},
     ]
     for company in paid_companies:
         if company["token"] == company_token:
