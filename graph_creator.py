@@ -25,9 +25,21 @@ def craete_graph(data, company_token):
 
 
 def main():
-    for company in ["SBER", "GAZP", "YNDX"]:
-        data = request_stocks(date(2020, 1, 1), date(2024, 1, 26), "GAZP")
-        craete_graph(data[-100:], 'SBER')
+    paid_companies = [
+        {"title": "Сбербанк", "active": False, "token": "SBER"},
+        {"title": "Тинькофф", "active": False, "token": "TCSG"},
+        {"title": "Яндекс", "active": False, "token": "YNDX"},
+        {"title": "Газпром", "active": False, "token": "GAZP"},
+        {"title": "Татнефть", "active": False, "token": "TATN"},
+        {"title": "Мечел", "active": False, "token": "MTLR"},
+        {"title": "Лукойл", "active": False, "token": "LKOH"},
+        {"title": "Аэрофлот", "active": False, "token": "AFLT"},
+        {"title": "Сургутнефтегаз", "active": False, "token": "SNGSP"}
+    ]
+    for company in paid_companies:
+        print(company['token'])
+        data = request_stocks(date(2020, 1, 1), date(2024, 1, 26), company['token'])
+        craete_graph(data, company['token'])
 
 
 if __name__ == '__main__':
