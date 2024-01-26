@@ -1,6 +1,26 @@
 from flask import Flask, render_template, url_for, abort, redirect
+from flask_login import LoginManager
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'your_secret_key'
+
+from data.db_session import create_session, global_init
+from data.users import User
+from data.stocks import Stock
+from data.companies import Company
+import os
+
+
+global_init(os.path.join("db", "database.db"))
+
+
+login_manager = LoginManager(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return create_session().query(User).get(user_id == user_id).first()
+
 
 @app.route('/')
 def index_page():
