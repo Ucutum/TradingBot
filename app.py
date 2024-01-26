@@ -52,28 +52,29 @@ def cost_page():
 def cover_page():
     return render_template('cover_page.html')
 
-@app.route('/dashboard/<company_url>')
-def dashboard_page(company_url):
-    if company_url == "first":
-        company_url = "google"
+@app.route('/dashboard/<company_token>')
+def dashboard_page(company_token):
+    if company_token == "first":
+        company_token = "GOGL"
     free_companies = [
-        {"url": "google", "title": "Google", "active": False},
-        {"url": "vk", "title": "Вконтакте", "active": False}
+        {"title": "Google", "active": False, "token": "GOGL"},
+        {"title": "Вконтакте", "active": False, "token": "VKCO"}
     ]
     for company in free_companies:
-        if company["url"] == company_url:
+        if company["token"] == company_token:
             company["active"] = True
     paid_companies = [
-        {"url": "sber", "title": "Сбербанк", "active": False},
-        {"url": "tinkoff", "title": "Тинькофф", "active": False},
-        {"url": "yandex", "title": "Яндекс", "active": False}
+        {"title": "Сбербанк", "active": False, "token": "SBER"},
+        {"title": "Тинькофф", "active": False, "token": "TINK"},
+        {"title": "Яндекс", "active": False, "token": "YNDX"}
     ]
     for company in paid_companies:
-        if company["url"] == company_url:
+        if company["token"] == company_token:
             company["active"] = True
     data = {
         "free_companies": free_companies,
-        "paid_companies": paid_companies
+        "paid_companies": paid_companies,
+        "company_token": company_token
     }
     return render_template('dashboard_page.html', **data)
 

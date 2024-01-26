@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <!-- saved from url=(0047)https://bootstrap5.ru/examples/starter-template -->
-<html lang="ru" prefix="og: http://ogp.me/ns#"><head>
+<html lang="ru" prefix="og: http://ogp.me/ns#">
 {% block head %}
-</head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="index, follow"><link rel="canonical" href="https://bootstrap5.ru/examples/starter-template">
 <meta name="description" content="Ничего, кроме основ: скомпилированный CSS и JavaScript.">
@@ -49,8 +48,9 @@
     </style>
     <!-- Custom styles for this template -->
     <link href="{{url_for('static', filename='./css/starter-template.css')}}" rel="stylesheet"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9">
-{% endblock %}</head>
-<body>
+    <link rel="docs">
+{% endblock %}
+<body style="background-image: url(https://www.coinhouse.com/wp-content/uploads/2021/05/chart-background.jpg)">
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand" href="https://bootstrap5.ru/examples/starter-template#">Navbar</a>
@@ -61,7 +61,7 @@
     <div class="collapse navbar-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav mr-auto mb-2 mb-md-0">
         <li class="nav-item active">
-          <a class="nav-link" aria-current="page" href="">Главная</a>
+          <a class="nav-link" aria-current="page" href="{{ url_for('index_page') }}">Главная</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('cost_page') }}">Cost</a>
@@ -70,7 +70,7 @@
           <a class="nav-link" href="{{ url_for('cover_page') }}">Cover</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('dashboard_page', company_url='first') }}">Dashboard</a>
+          <a class="nav-link" href="{{ url_for('dashboard_page', company_token='first') }}">Dashboard</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('futer_page') }}">Futer</a>

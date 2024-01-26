@@ -1,19 +1,18 @@
-
 {% extends 'index.html' %}
 
+<head>
 {% block head %}
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="index, follow"><link rel="canonical" href="https://bootstrap5.ru/examples/starter-template">
-<meta name="description" content="Ничего, кроме основ: скомпилированный CSS и JavaScript.">
+<meta name="robots" content="index, follow"><link rel="canonical" href="https://bootstrap5.ru/examples/product" />
+<meta name="description" content="Экономичная маркетинговая страница, ориентированная на продукт, с обширной сеткой и изображениями.">
 <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors, Alexey Golyagin">
 <meta name="docsearch:language" content="ru">
 <meta name="docsearch:version" content="5.0">
-<title>Бесплатный стартовый bootstrap 5 шаблон</title>
+<title>Бесплатный bootstrap 5 шаблон - Продукт</title>
 <!-- Bootstrap core CSS -->
-<link rel="stylesheet" href="{{url_for('static', filename='./css/bootstrap.min.css')}}" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
-<link rel="stylesheet" href="{{url_for('static', filename='./css/docs.css')}}">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+<link rel="stylesheet" href="https://bootstrap5.ru/css/docs.css">
 <!-- Favicons -->
 <link rel="apple-touch-icon" href="https://bootstrap5.ru/img/favicons/apple-touch-icon.png" sizes="180x180">
 <link rel="icon" href="https://bootstrap5.ru/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
@@ -23,11 +22,11 @@
 <link rel="icon" href="https://bootstrap5.ru/img/favicons/favicon.ico">
 <meta name="theme-color" content="#7952b3">
 <!-- Facebook -->
-<meta property="og:url" content="https://bootstrap5.ru/examples/starter-template">
-<meta property="og:title" content="Бесплатный стартовый bootstrap 5 шаблон">
-<meta property="og:description" content="Ничего, кроме основ: скомпилированный CSS и JavaScript.">
+<meta property="og:url" content="https://bootstrap5.ru/examples/product">
+<meta property="og:title" content="Бесплатный bootstrap 5 шаблон - Продукт">
+<meta property="og:description" content="Экономичная маркетинговая страница, ориентированная на продукт, с обширной сеткой и изображениями.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://bootstrap5.ru/img/examples/starter-template.png">
+<meta property="og:image" content="https://bootstrap5.ru/img/examples/product.png">
 <meta property="og:image:type" content="image/jpg">
 <meta property="og:image:width" content="1000">
 <meta property="og:image:height" content="500">
@@ -40,7 +39,6 @@
         -ms-user-select: none;
         user-select: none;
       }
-
       @media (min-width: 768px) {
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
@@ -48,31 +46,49 @@
       }
     </style>
     <!-- Custom styles for this template -->
-    <link href="{{url_for('static', filename='./css/starter-template.css')}}" rel="stylesheet"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9">
-{% endblock head %}
+    <link href="/css/examples/product.css" rel="stylesheet">
+    {% endblock head %} </head>
 
+<body>
 {% block body %}
+<div class="position-relative overflow-hidden p-3 p-md-5 m-md-3 text-center bg-light" style="background-image: url(https://bogatyr.club/uploads/posts/2023-03/1679604938_bogatyr-club-p-grafik-na-temnom-fone-instagram-12.jpg)">
+      <div class="col-md-5 p-lg-5 mx-auto my-5">
+        <h1 class="display-4 font-weight-normal" style="font-size: 84px;color: white">TradeBot</h1>
+        <p class="lead font-weight-normal" style="font-size: 36px;color: white">Лучший торговый бот в РФ!</p>
+        <a class="btn btn-outline-secondary" href="/logiin">Регистрация</a>
+      </div>
+      <div class="product-device shadow-sm d-none d-md-block"></div>
+      <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
+</div>
+<hr class="featurette-divider">
 
-  
-<main class="container">
+    <div class="row featurette">
+      <div class="col-md-7">
+        <h2 class="featurette-Заголовок" style="font-size: 48px;color:white;margin: 30px">Два миллиона пользователь ежемесячно выводят тысячи благодаря нашему боту!<span class="text-muted">Присоединяйся!</span></h2>
+        <p class="lead" style="font-size: 36px;color:white">В прошлом году общий объем заработка у наших пользователей сотавил 2млрд рублей!</p>
+      </div>
+      <div class="col-md-5">
+        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="480" height="420" xmlns="http://www.w3.org/2000/svg" aria-label="Placeholder: 500x500" preserveaspectratio="xMidYMid slice" role="img" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"></rect><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
 
-  <div class="starter-template text-center py-5 px-3">
-    <h1>Начальный шаблон Bootstrap</h1>
-    <p class="lead">Используйте этот документ как способ быстро начать любой новый проект. Все, что вы получаете, - это текст и в основном простой HTML-документ.</p>
-  </div>
+      </div>
+    </div>
 
-</main><!-- /.container --><script type="text/javascript" async="" src="{{url_for('static', filename='./js/analytics.js')}}"></script><script type="text/javascript" async="" src=""></script><script async="" src="{{url_for('static', filename='./js/tag.js')}}"></script><script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async="" src="(1)"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){ dataLayer.push(arguments); }
-  gtag('js', new Date());
+    <hr class="featurette-divider">
 
-  gtag('config', 'UA-179173139-1');
+    <div class="row featurette">
+      <div class="col-md-7 order-md-2">
+        <h2 class="featurette-Заголовок">Oh yeah, it’s that good. <span class="text-muted">See for yourself.</span></h2>
+        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+      </div>
+      <div class="col-md-5 order-md-1">
+        <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" aria-label="Placeholder: 500x500" preserveaspectratio="xMidYMid slice" role="img" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"></rect><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
+
+      </div>
+    </div>
+
+
 </script>
-<!-- Yandex.Metrika counter --> <script type="text/javascript"> (function(m,e,t,r,i,k,a){ m[i]=m[i]||function(){ (m[i].a=m[i].a||[]).push(arguments) }; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(67718821, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/67718821" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
-<script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>
-
-
+<!-- Yandex.Metrika counter --> <script type="text/javascript" > (function(m,e,t,r,i,k,a){ m[i]=m[i]||function(){ (m[i].a=m[i].a||[]).push(arguments) }; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(67718821, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/67718821" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
 {% endblock body %}
+</body>

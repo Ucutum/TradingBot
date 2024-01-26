@@ -14,6 +14,6 @@ class Company(SqlAlchemyBase, UserMixin, SerializerMixin):
         sqlalchemy.Integer,
         primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    code = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    token = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     stocks = orm.relationship("Stock", back_populates='company', uselist=True)
     model = sqlalchemy.Column(sqlalchemy.String)
