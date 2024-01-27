@@ -12,7 +12,7 @@
 <meta name="docsearch:version" content="5.0">
 <title>Бесплатный bootstrap 5 шаблон административной панели</title>
 <!-- Bootstrap core CSS -->
-<link rel="stylesheet" href="{{url_for('static', filename='./css/bootstrap.min.css')}}" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+<link rel="stylesheet" href="{{url_for('static', filename='./css/bootstrap.min.css')}}" crossorigin="anonymous">
 <link rel="stylesheet" href="{{url_for('static', filename='./css/docs.css')}}">
 <!-- Favicons -->
 <link rel="apple-touch-icon" href="https://bootstrap5.ru/img/favicons/apple-touch-icon.png" sizes="180x180">
@@ -46,66 +46,77 @@
           font-size: 3.5rem;
         }
       }
-    </style>
+      .scroll { 
+        height: 1000px; /* Высота блока */
+        overflow-y: scroll; /* Включаем вертикальную прокрутку */
+      }
+      th {
+        color:;
+        font-size:36px; 
+      }
+      td{
+        color: black;
+        font-size:36px; 
+        font-family: 'Open Sans';   
+      } 
+    </style>  
     <!-- Custom styles for this template -->
     <link href="{{url_for('static', filename='./css/dashboard.css')}}" rel="stylesheet"><style type="text/css">/* Chart.js */
 @keyframes chartjs-render-animation{from{opacity:.99}to{opacity:1}}.chartjs-render-monitor{animation:chartjs-render-animation 1ms}.chartjs-size-monitor,.chartjs-size-monitor-expand,.chartjs-size-monitor-shrink{position:absolute;direction:ltr;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1}.chartjs-size-monitor-expand>div{position:absolute;width:1000000px;height:1000000px;left:0;top:0}.chartjs-size-monitor-shrink>div{position:absolute;width:200%;height:200%;left:0;top:0}</style><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9">
 {% endblock head %}
 
 {% block body %}
-
 <div class="container-fluid">
-  <div class="row">
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-      <div class="position-sticky pt-3">
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>Компании по бесплатной подписке</span>
-        </h6>
-        <ul class="nav flex-column">
-          {% for company in free_companies %}
-          {% if company.active %}
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{url_for('dashboard_page', company_token=company.token)}}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-              {{ company.title }}
-            </a>
-          </li>
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{url_for('dashboard_page', company_token=company.token)}}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-              {{ company.title }}
-            </a>
-          </li>
-          {% endif %}
-          {% endfor %}
-        </ul>
-
-        <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-          <span>Компании по платной подписке</span>
-        </h6>
-        <ul class="nav flex-column">
-          {% for company in paid_companies %}
-          {% if company.active %}
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{{url_for('dashboard_page', company_token=company.token)}}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-              {{ company.title }}
-            </a>
-          </li>
-          {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{{url_for('dashboard_page', company_token=company.token)}}">
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
-              {{ company.title }}
-            </a>
-          </li>
-          {% endif %}
-          {% endfor %}
-        </ul>
-      </div>
-    </nav>
-
+    <div class="row">
+      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="scroll">
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Компании по бесплатной подписке</span>
+          </h6>
+          <ul class="nav flex-column">
+            {% for company in free_companies %}
+            {% if company.active %}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{{url_for('dashboard_page', company_token=company.token)}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                {{ company.title }}
+              </a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('dashboard_page', company_token=company.token)}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                {{ company.title }}
+              </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+  
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>Компании по платной подписке</span>
+          </h6>
+          <ul class="nav flex-column">
+            {% for company in paid_companies %}
+            {% if company.active %}
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="{{url_for('dashboard_page', company_token=company.token)}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                {{ company.title }}
+              </a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{url_for('dashboard_page', company_token=company.token)}}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>
+                {{ company.title }}
+              </a>
+            </li>
+            {% endif %}
+            {% endfor %}
+          </ul>
+        </div>
+      </nav>
     <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
@@ -122,9 +133,29 @@
       </div>
 
       <h2>График цен</h2>
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <div class="tradingview-widget-copyright"><a href="https://ru.tradingview.com/" rel="noopener nofollow" target="_blank"><span class="blue-text">Все рынки на TradingView</span></a></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+        {
+        "width": "980",
+        "height": "600",
+        "symbol": "NASDAQ:AAPL",
+        "interval": "D",
+        "timezone": "Etc/UTC",
+        "theme": "light",
+        "style": "1",
+        "locale": "ru",
+        "enable_publishing": false,
+        "allow_symbol_change": true,
+        "support_host": "https://www.tradingview.com"
+      }
+        </script>
+      </div>
 
 <!--      <canvas class="my-4 w-100 chartjs-render-monitor" id="myChart" width="1013" height="427" style="display: block; width: 1013px; height: 427px;"></canvas>-->'
-      <img src="{{ url_for('static', filename='graph/' + company_token + '_graph.png') }}">
+      <!-- TradingView Widget BEGIN -->
+<!-- TradingView Widget END -->
 
 
       <h2>Таблица цен</h2>
@@ -258,7 +289,7 @@
     </main>
   </div>
 </div><script type="text/javascript" async="" src="{{url_for('static', filename='./js/analytics.js')}}"></script><script type="text/javascript" async="" src=""></script><script async="" src="{{url_for('static', filename='./js/tag.js')}}"></script><script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>
-<script src="{{url_for('static', filename='./js/feather.min.js')}}" integrity="sha384-EbSscX4STvYAC/DxHse8z5gEDaNiKAIGW+EpfzYTfQrgIlHywXXrM9SUIZ0BlyfF" crossorigin="anonymous"></script>       <script src="{{url_for('static', filename='./js/Chart.min.js')}}" integrity="sha384-i+dHPTzZw7YVZOx9lbH5l6lP74sLRtMtwN2XjVqjf3uAGAREAF4LMIUDTWEVs4LI" crossorigin="anonymous"></script> 	  <script src="{{url_for('static', filename='./js/dashboard.js')}}"></script><!-- Global site tag (gtag.js) - Google Analytics -->
+<script src="{{url_for('static', filename='./js/feather.min.js')}}" crossorigin="anonymous"></script>       <script src="{{url_for('static', filename='./js/Chart.min.js')}}" crossorigin="anonymous"></script> 	  <script src="{{url_for('static', filename='./js/dashboard.js')}}"></script><!-- Global site tag (gtag.js) - Google Analytics -->
 <script async="" src="(1)"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
