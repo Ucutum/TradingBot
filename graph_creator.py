@@ -6,6 +6,7 @@ from stock_ai import generate, load_model, grounding, ungrounding_one, grounding
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
+import csv
 
 
 def read_data(filename):
@@ -35,7 +36,11 @@ def craete_graph(data, company_token):
 
 
 def main():
-    for company in ["GAZP", "VKCO", "SBER", "YNDX"]:
+    with open("all.csv") as f:
+        companies = [e[1] for e in csv.reader(f, delimiter=";")]
+    print(companies)
+
+    for company in companies:
         data = request_stocks(date(2020, 1, 1), date(2024, 1, 26), company)
         # data = read_data("models/YNDX_000101_240101.csv", delimiter=';')
         x = np.array([np.array(data[["open", "close"]].mean(axis=1))[-100:]])
