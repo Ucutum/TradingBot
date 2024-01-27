@@ -54,49 +54,23 @@ def cover_page():
 
 @app.route('/dashboard/<company_token>')
 def dashboard_page(company_token):
-    if company_token == "first":
-        company_token = "GOGL"
     free_companies = [
-        {"title": "Google", "active": False, "token": "GOGL"},
-        {"title": "Вконтакте", "active": False, "token": "VKCO"}
+        {"title": "Google", "active": False, "token": "GOOG"},
+        {"title": "Apple", "active": False, "token": "AAPL"}
     ]
     for company in free_companies:
         if company["token"] == company_token:
             company["active"] = True
     paid_companies = [
-        {"title": "Сбербанк", "active": False, "token": "SBER"},
-        {"title": "Тинькофф", "active": False, "token": "TCSG"},
-        {"title": "Яндекс", "active": False, "token": "YNDX"},
-        {"title": "Газпром", "active": False, "token": "GAZP"},
-        {"title": "Татнефть", "active": False, "token": "TATN"},
-        {"title": "Мечел", "active": False, "token": "MTLR"},
-        {"title": "Лукойл", "active": False, "token": "LKOH"},
-        {"title": "Аэрофлот", "active": False, "token": "AFLT"},
-        {"title": "Сургутнефтегаз", "active": False, "token": "SNGS"},
-        {"title": "МТС", "active": False, "token": "MTSS"},
-        {"title": "Магнит", "active": False, "token": "MGNT"},
-        {"title": "Новатэк", "active": False, "token": "NVTK"},
-        {"title": "М.Видео", "active": False, "token": "MVID"},
-        {"title": "Татнефть", "active": False, "token": "TATN"},
-        {"title": "НЛМК", "active": False, "token": "NLMK"},
-        {"title": "Эн+", "active": False, "token": "ENPG"},
-        {"title": "ММК", "active": False, "token": "MAGN"},
-        {"title": "Северсталь", "active": False, "token": "CHMF"},
-        {"title": "АФК Система", "active": False, "token": "AFKS"},
-        {"title": "Трубная Металлургическая Компания", "active": False, "token": "TRMK"},
-        {"title": "Мосэнерго", "active": False, "token": "MSNG"},
-        {"title": "ФосАгро", "active": False, "token": "PHOR"},
-        {"title": "РусГидро", "active": False, "token": "HYDR"},
-        {"title": "Полюс", "active": False, "token": "PLZL"},
-        {"title": "АЛРОСА", "active": False, "token": "ALRS"},
-        {"title": "РосНефть", "active": False, "token": "RNFT"},
-        {"title": "КАМАЗ", "active": False, "token": "KMAZ"},
-        {"title": "Россети Московский Регион", "active": False, "token": "MSRS"},
-        {"title": "Детский Мир", "active": False, "token": "DSKY"},
-        {"title": "Группа Черкизово", "active": False, "token": "GCHE"},
-        {"title": "Совкомфлот", "active": False, "token": "FLOT"},
-        {"title": "СОЛЛЕРС", "active": False, "token": "SVAV"},
-        {"title": "Юнипро", "active": False, "token": "UPRO"},
+        {"title": "Yandex", "active": False, "token": "YNDX"}, # РАБотает
+        {"title": "QIWI", "active": False, "token": "QIWI"}, # РАБотает
+        {"title": "Татнефть", "active": False, "token": "OTC:OAOFY"}, # РАБотает
+        {"title": "Группа Эталон", "active": False, "token": "ETLN"}, # РАБотает
+        {"title": "Bitcoin", "active": False, "token": "BTCUSD"},
+        {"title": "NVIDIA Corporation", "active": False, "token": "NVDA"},
+        {"title": "Amazon", "active": False, "token": "AMZN"},
+        {"title": "PayPal", "active": False, "token": "PYPL"},
+        {"title": "UBER", "active": False, "token": "UBER"},
     ]
     for company in paid_companies:
         if company["token"] == company_token:
