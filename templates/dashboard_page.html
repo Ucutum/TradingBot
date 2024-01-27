@@ -46,6 +46,10 @@
           font-size: 3.5rem;
         }
       }
+      .scroll { 
+        height: 1000px; /* Высота блока */
+        overflow-y: scroll; /* Включаем вертикальную прокрутку */
+      }
     </style>
     <!-- Custom styles for this template -->
     <link href="{{url_for('static', filename='./css/dashboard.css')}}" rel="stylesheet"><style type="text/css">/* Chart.js */
@@ -53,11 +57,10 @@
 {% endblock head %}
 
 {% block body %}
-
 <div class="container-fluid">
-  <div class="row">
+    <div class="row">
       <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-        <div class="position-sticky pt-3">
+        <div class="scroll">
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
             <span>Компании по бесплатной подписке</span>
           </h6>
@@ -80,7 +83,7 @@
             {% endif %}
             {% endfor %}
           </ul>
-
+  
           <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
             <span>Компании по платной подписке</span>
           </h6>
@@ -105,7 +108,6 @@
           </ul>
         </div>
       </nav>
-
     <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
