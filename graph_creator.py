@@ -2,6 +2,11 @@ import pandas as pd
 import mplfinance as mpf
 from csv_parser import request_stocks
 from datetime import date
+from stock_ai import generate, load_model, grounding, ungrounding_one, grounding_one
+import numpy as np
+import pandas as pd
+from datetime import datetime, timedelta
+import csv
 
 
 def read_data(filename):
@@ -21,49 +26,46 @@ def read_data(filename):
     
 
 def craete_graph(data, company_token):
-    mpf.plot(data, type='candle', savefig=f"static/graph/{company_token}_graph.png")
+    d = data.index[-6]
+    print("!!!", d)
+    mpf.plot(
+        data, type='candle',
+        savefig=f"static/graph/{company_token}_graph.png",
+        vlines=dict(vlines=d,
+                    linewidths=1, alpha=0.5))
 
 
 def main():
-    paid_companies = [
-        {"title": "Сбербанк", "active": False, "token": "SBER"},
-        {"title": "Тинькофф", "active": False, "token": "TCSG"},
-        {"title": "Яндекс", "active": False, "token": "YNDX"},
-        {"title": "Газпром", "active": False, "token": "GAZP"},
-        {"title": "Татнефть", "active": False, "token": "TATN"},
-        {"title": "Мечел", "active": False, "token": "MTLR"},
-        {"title": "Лукойл", "active": False, "token": "LKOH"},
-        {"title": "Аэрофлот", "active": False, "token": "AFLT"},
-        {"title": "Сургутнефтегаз", "active": False, "token": "SNGS"},
-        {"title": "МТС", "active": False, "token": "MTSS"},
-        {"title": "Магнит", "active": False, "token": "MGNT"},
-        {"title": "Новатэк", "active": False, "token": "NVTK"},
-        {"title": "М.Видео", "active": False, "token": "MVID"},
-        {"title": "Татнефть", "active": False, "token": "TATN"},
-        {"title": "НЛМК", "active": False, "token": "NLMK"},
-        {"title": "Эн+", "active": False, "token": "ENPG"},
-        {"title": "ММК", "active": False, "token": "MAGN"},
-        {"title": "Северсталь", "active": False, "token": "CHMF"},
-        {"title": "АФК Система", "active": False, "token": "AFKS"},
-        {"title": "Трубная Металлургическая Компания", "active": False, "token": "TRMK"},
-        {"title": "Мосэнерго", "active": False, "token": "MSNG"},
-        {"title": "ФосАгро", "active": False, "token": "PHOR"},
-        {"title": "РусГидро", "active": False, "token": "HYDR"},
-        {"title": "Полюс", "active": False, "token": "PLZL"},
-        {"title": "АЛРОСА", "active": False, "token": "ALRS"},
-        {"title": "РосНефть", "active": False, "token": "RNFT"},
-        {"title": "КАМАЗ", "active": False, "token": "KMAZ"},
-        {"title": "Россети Московский Регион", "active": False, "token": "MSRS"},
-        {"title": "Детский Мир", "active": False, "token": "DSKY"},
-        {"title": "Группа Черкизово", "active": False, "token": "GCHE"},
-        {"title": "Совкомфлот", "active": False, "token": "FLOT"},
-        {"title": "СОЛЛЕРС", "active": False, "token": "SVAV"},
-        {"title": "Юнипро", "active": False, "token": "UPRO"},
-    ]
-    for company in paid_companies:
-        print(company['token'])
-        data = request_stocks(date(2020, 1, 1), date(2024, 1, 26), company['token'])
-        craete_graph(data, company['token'])
+    with open("all.csv") as f:
+        companies = [e[1] for e in csv.reader(f, delimiter=";")]
+    print(companies)
+
+    for company in companies:
+        data = request_stocks(date(2020, 1, 1), date(2024, 1, 26), company)
+        # data = read_data("models/YNDX_000101_240101.csv", delimiter=';')
+        x = np.array([np.array(data[["open", "close"]].mean(axis=1))[-100:]])
+        x, mxx = grounding_one(x)
+        model = load_model(f"models/{company}_model.h5")
+        p = model.predict(x)
+        p = ungrounding_one(p, mxx)[0]
+
+        last = data['close'][-1]
+        for i in range(5):
+            last_date = data.index[-1]
+            next_day = last_date + timedelta(days=1)
+            prow = {
+                # 'begin': last_date,
+                'open': last,
+                'high': max(last, p[i]) + 1,
+                'low': min(last, p[i]) - 1,
+                'close': p[i],
+                'value': 0,
+                'quantity': 0,
+                'end': 0
+            }
+            last = p[i]
+            data.loc[next_day] = prow
+        craete_graph(data[-100:], company)
 
 
 if __name__ == '__main__':
