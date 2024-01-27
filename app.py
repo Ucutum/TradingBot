@@ -13,7 +13,7 @@ import os
 
 global_init(os.path.join("db", "database.db"))
 
-
+    
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 

@@ -44,17 +44,35 @@
           font-size: 3.5rem;
         }
       }
+      body h1 {
+        text-shadow: 4px 4px 4px #062cea;
+      }
+      body h2 {
+        color:white;
+        font-size:48px; 
+        text-shadow: 2px 2px 2px #0d56d4;
+      }
+      body p {
+        color:white;
+        font-size:48px; 
+        text-shadow: 1px 1px 1px #88c105;
+      }
+      .lead {
+        color:white;
+        font-size:36px; 
+        text-shadow: 1px 1px 1px #88c105;
+      }
     </style>
     <!-- Custom styles for this template -->
-    <link href="/css/examples/product.css" rel="stylesheet">
+    <link href="/css/examples/product.css" rel="stylesheet">  
     {% endblock head %} </head>
 
-<body>
 {% block body %}
-<div class="col-md-5 p-lg-5 mx-auto my-5">
+<body>
+<div class="col-md-5 p-lg-5 mx-auto my-5">  
   <h1 class="display-4 font-weight-normal" style="font-size: 120px;color: white"align=center>TradeBot</h1>
-  <p class="lead font-weight-normal" style="font-size: 36px;color: white"align=center>Лучший торговый бот в РФ!</p>
-  <p ><a class="btn btn-outline-secondary" href="/logiin">Регистрация</a></p>
+  <p class="lead font-weight-normal" style="color: white"align=center>Лучший торговый бот в РФ!</p>
+  <p align="center"><a class="btn btn-outline-secondary" href="/logiin">Регистрация</a></p>
 </div>
 <div class="product-device shadow-sm d-none d-md-block"></div>
 <div class="product-device product-device-2 shadow-sm d-none d-md-block"></div>
@@ -62,8 +80,8 @@
 
     <div class="row featurette">
       <div class="col-md-7">
-        <h2 class="featurette-Заголовок" style="font-size: 48px;color:white;margin: 30px">Два миллиона пользователь ежемесячно выводят тысячи благодаря нашему боту!<span class="text-muted">Присоединяйся!</span></h2>
-        <p class="lead" style="font-size: 36px;color:white">В прошлом году общий объем заработка у наших пользователей сотавил 2млрд рублей!</p>
+        <h2 class="featurette-Заголовок" style="color:white;margin: 30px">Два миллиона пользователь ежемесячно выводят тысячи благодаря нашему боту!</h2>
+        <p class="lead" style="color:white">В прошлом году общий объем заработка у наших пользователей сотавил 2млрд рублей!</p>
       </div>
       <div class="col-md-5">
         <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="480" height="420" xmlns="http://www.w3.org/2000/svg" aria-label="Placeholder: 500x500" preserveaspectratio="xMidYMid slice" role="img" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"></rect><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
@@ -75,8 +93,10 @@
 
     <div class="row featurette">
       <div class="col-md-7 order-md-2">
-        <h2 class="featurette-Заголовок">Oh yeah, it’s that good. <span class="text-muted">See for yourself.</span></h2>
-        <p class="lead">Donec ullamcorper nulla non metus auctor fringilla. Vestibulum id ligula porta felis euismod semper. Praesent commodo cursus magna, vel scelerisque nisl consectetur. Fusce dapibus, tellus ac cursus commodo.</p>
+        <h2 class="featurette-Заголовок">Как мы прогнозируем?</h2></h2>
+        <p class="lead">
+          Мы используем собственный алгоритм для анализа акций различных компаний!
+        </p>
       </div>
       <div class="col-md-5 order-md-1">
         <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500" height="500" xmlns="http://www.w3.org/2000/svg" aria-label="Placeholder: 500x500" preserveaspectratio="xMidYMid slice" role="img" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#eee"></rect><text x="50%" y="50%" fill="#aaa" dy=".3em">500x500</text></svg>
@@ -88,5 +108,5 @@
 </script>
 <!-- Yandex.Metrika counter --> <script type="text/javascript" > (function(m,e,t,r,i,k,a){ m[i]=m[i]||function(){ (m[i].a=m[i].a||[]).push(arguments) }; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(67718821, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/67718821" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
-{% endblock body %}
 </body>
+{% endblock body %}
