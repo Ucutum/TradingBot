@@ -13,7 +13,7 @@ import os
 
 global_init(os.path.join("db", "database.db"))
 
-    
+
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
@@ -129,7 +129,7 @@ def error404page(error):
     }
     return render_template('error_page.html', **data), 404
 
-
+    
 @app.errorhandler(403)
 def error403page(error):
     data = {
