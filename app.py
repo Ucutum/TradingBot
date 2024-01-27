@@ -13,7 +13,7 @@ import os
 
 global_init(os.path.join("db", "database.db"))
 
-    
+
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
@@ -85,6 +85,10 @@ def dashboard_page(company_token):
 @app.route("/futer")
 def futer_page():
     return render_template('futer_page.html')
+
+@app.route("/futer2")
+def futer_page2():
+    return render_template('futer_page2.html')
 
 @app.route("/logiin")
 def login_page():
