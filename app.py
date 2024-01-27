@@ -112,6 +112,10 @@ def dashboard_page(company_token):
 def futer_page():
     return render_template('futer_page.html')
 
+@app.route("/futer2")
+def futer_page2():
+    return render_template('futer_page2.html')
+
 @app.route("/logiin")
 def login_page():
     return render_template('login_page.html')
@@ -129,7 +133,7 @@ def error404page(error):
     }
     return render_template('error_page.html', **data), 404
 
-    
+
 @app.errorhandler(403)
 def error403page(error):
     data = {
