@@ -105,9 +105,9 @@ TYPE html>
 <!-- Begin page content -->
 <main class="flex-shrink-0">
   <div class="container">
-    <h1 class="mt-5">Липкий футер 2</h1>
-    <p class="lead">Закрепите футер в нижней части области просмотра в настольных браузерах с помощью этого настраиваемого HTML и CSS.</p>
-    <p>При необходимости <a href="https://bootstrap5.ru/examples/sticky-footer-navbar">используйте липкий футер с фиксированной навигационной панелью</a>.</p>
+    <h1 class="mt-5">Стратегия от AI</h1>
+    <p class="lead">Наша нейросеть прогнозирует, что акции будут развиваться следущим образом.</p>
+    <!-- <p>При необходимости <a href="https://bootstrap5.ru/examples/sticky-footer-navbar">используйте липкий футер с фиксированной навигационной панелью</a>.</p> -->
   </div>
 </main>
 
@@ -117,9 +117,10 @@ TYPE html>
   </div> -->
   {% for g in graphs %}
   <div class="card" style="width: 100%;">
+    <h1 style="text-align: center">{{ g.name }}</h1>
     <img src="{{ url_for('static', filename=g.img) }}" class="card-img-top" alt="...">
     <div class="card-body">
-      <p class="card-text">{{ g.name }}</p>
+      <!-- <p class="card-text"></p> -->
     </div>
   </div>
   <p></p>
