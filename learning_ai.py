@@ -16,12 +16,19 @@ from keras.callbacks import History
 import matplotlib.pyplot as plt
 import pandas as pd
 import math
+from csv_parser import write_data, request_stocks
+import csv
+import datetime
 
 
 def read_data(filename, delimiter='\t'):
     data = pd.read_csv(filename, delimiter=delimiter)
+    # Date;Open;High;Low;Close;Adj Close;Volume
+    data.rename(columns={
+        "Date": "<DATE>", "Open": "<OPEN>",
+        "High": "<HIGH>", "Low": "<LOW>", "Close": "<CLOSE>", "Volume": "<VOL>"}, inplace=True)
     data = data[['<DATE>', '<OPEN>', '<HIGH>', '<LOW>', '<CLOSE>', '<VOL>']]
-    data['<DATE>'] = pd.to_datetime(data['<DATE>'], format='%d/%m/%y')
+    data['<DATE>'] = pd.to_datetime(data['<DATE>'], format='%Y-%m-%d')
     data['<OPEN>'] = pd.to_numeric(data['<OPEN>'])
     data['<HIGH>'] = pd.to_numeric(data['<HIGH>'])
     data['<LOW>'] = pd.to_numeric(data['<LOW>'])
@@ -136,9 +143,10 @@ def make_selections(x, y, pl, mxx):
   return xl, xt, yl, yt, mxxl, mxxt
 
 
-def learn(filename, foldername):
-  print(f"Обработка {filename}")
-  data = read_data(filename, delimiter=';')
+def learn(token, foldername):
+  print(f"Обработка {token}")
+  data = read_data(foldername + token + ".csv", delimiter=';')
+  print(data.head(3))
   data = data[["Open", "Close"]].mean(axis=1)
   data = np.array(data)
   data = data[:]
@@ -159,7 +167,7 @@ def learn(filename, foldername):
   plt.title('График сходимости')
   plt.xlabel('Эпоха')
   plt.ylabel('Функция потерь')
-  plt.savefig(foldername + filename[:4] + '_convergence.png')
+  plt.savefig(foldername + token + '_convergence.png')
 
   i_stat = range(len(xt))
   loss_stat = (ungrounding_one(yt, mxxt) - ungrounding_one(model.predict(xtf), mxxt))[:, 0]
@@ -182,14 +190,21 @@ def learn(filename, foldername):
   plt.xlabel('diff')
   plt.ylabel('loss')
   plt.title('Scatter Plot of y vs p with Color-encoded Loss')
-  plt.savefig(foldername + filename[:4] + '_loss.png')
+  plt.savefig(foldername + token + '_loss.png')
 
-  model_name = foldername + filename[:4] + "_model.h5"
+  model_name = foldername + token + "_model.h5"
   model.save(model_name)
 
 
 def main():
-  pass
+  with open("all.csv") as f:
+    companies = [e[1] for e in csv.reader(f, delimiter=";")]
+  companies = companies[8:]
+  for c in companies:
+    print(f"Downloadding data {c}")
+    write_data(request_stocks(datetime.datetime(2000, 1, 1), c), "models/" + c + ".csv")
+    print(f"Learning {c}")
+    learn(c, "models/")
 
 
 if __name__ == '__main__':
