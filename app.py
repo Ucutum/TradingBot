@@ -9,6 +9,7 @@ from data.users import User
 from data.stocks import Stock
 from data.companies import Company
 import os
+import csv
 
 
 global_init(os.path.join("db", "database.db"))
@@ -61,17 +62,18 @@ def dashboard_page(company_token):
     for company in free_companies:
         if company["token"] == company_token:
             company["active"] = True
-    paid_companies = [
-        {"title": "Yandex", "active": False, "token": "YNDX"}, # РАБотает
-        {"title": "QIWI", "active": False, "token": "QIWI"}, # РАБотает
-        {"title": "Татнефть", "active": False, "token": "OTC:OAOFY"}, # РАБотает
-        {"title": "Группа Эталон", "active": False, "token": "ETLN"}, # РАБотает
-        {"title": "Bitcoin", "active": False, "token": "BTCUSD"},
-        {"title": "NVIDIA Corporation", "active": False, "token": "NVDA"},
-        {"title": "Amazon", "active": False, "token": "AMZN"},
-        {"title": "PayPal", "active": False, "token": "PYPL"},
-        {"title": "UBER", "active": False, "token": "UBER"},
-    ]
+
+    paid_companies = list()
+    with open('all.csv', newline='', encoding="utf-8") as f:
+        spamreader = csv.reader(f, delimiter=';')
+
+        for row in spamreader:
+            paid_companies.append({"title" : row[0], "active" : False, "token" : row[1]})
+
+        # print(d['title'])
+        
+        # paid_companies.append({"title" : d['title'], "active" : False, "token" : d['token']})
+
     for company in paid_companies:
         if company["token"] == company_token:
             company["active"] = True

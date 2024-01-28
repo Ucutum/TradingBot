@@ -18,5 +18,5 @@ def write_data(df: pd.DataFrame, filename):
 
 if __name__ == '__main__':
     # request_stocks(datetime.datetime(2020, 1, 1), "NVDA")
-    # write_data(request_stocks(datetime.datetime(2019, 1, 1), "AAPL"), "AAPL.csv")
+    # write_data(request_stocks(datetime.datetime(2019, 1, 1), "BTC-USD"), "BTCUSD.csv")
     # print(read_data("AAPL.csv"))
