@@ -112,9 +112,18 @@ TYPE html>
 </main>
 
 <footer class="footer mt-auto py-3 bg-light">
-  <div class="container">
+  <!-- <div class="container">
     <span class="text-muted">Поместите сюда липкий футер.</span>
+  </div> -->
+  {% for g in graphs %}
+  <div class="card" style="width: 100%;">
+    <img src="{{ url_for('static', filename=g.img) }}" class="card-img-top" alt="...">
+    <div class="card-body">
+      <p class="card-text">{{ g.name }}</p>
+    </div>
   </div>
+  <p></p>
+  {% endfor %}
 </footer><script type="text/javascript" async="" src="{{url_for('static', filename='./js/analytics.js')}}"></script><script type="text/javascript" async="" src=""></script><script async="" src="{{url_for('static', filename='./js/tag.js')}}"></script><script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async="" src="(1)"></script>

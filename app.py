@@ -88,9 +88,15 @@ def dashboard_page(company_token):
 def futer_page():
     return render_template('futer_page.html')
 
-@app.route("/futer2")
-def futer_page2():
-    return render_template('futer_page2.html')
+@app.route("/ai_strategy")
+def ai_strategy_page():
+    with open("all.csv") as f:
+        companies = [i for i in csv.reader(f, delimiter=";")]
+    graphs = [
+        {"name": i[0],
+         "img":f"graph/{i[1]}_graph.png"}
+               for i in companies]
+    return render_template('ai_strategy.html', graphs=graphs)
 
 @app.route("/logiin")
 def login_page():
