@@ -199,7 +199,7 @@ def learn(token, foldername):
 def main():
   with open("all.csv") as f:
     companies = [e[1] for e in csv.reader(f, delimiter=";")]
-  companies = companies[8:]
+  companies = companies
   for c in companies:
     print(f"Downloadding data {c}")
     write_data(request_stocks(datetime.datetime(2000, 1, 1), c), "models/" + c + ".csv")
