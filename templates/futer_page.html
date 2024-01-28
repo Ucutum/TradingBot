@@ -105,17 +105,14 @@ TYPE html>
 <!-- Begin page content -->
 <main class="flex-shrink-0">
   <div class="container">
-    <h1 class="mt-5">Липкий футер</h1>
-    <p class="lead">Закрепите футер в нижней части области просмотра в настольных браузерах с помощью этого настраиваемого HTML и CSS.</p>
-    <p>При необходимости <a href="https://bootstrap5.ru/examples/sticky-footer-navbar">используйте липкий футер с фиксированной навигационной панелью</a>.</p>
+    <h1 class="mt-5">Количество денег: {{MONEY}} USD</h1>
+    <h1 class="mt-5">Текущие акции в портфеле:</h1>
+    {% for share in current_shares %}
+    <p>{{share.title}}: {{share.cost}} акций</p>
+    {% endfor %}
   </div>
 </main>
 
-<footer class="footer mt-auto py-3 bg-light">
-  <div class="container">
-    <span class="text-muted">Поместите сюда липкий футер.</span>
-  </div>
-</footer><script type="text/javascript" async="" src="{{url_for('static', filename='./js/analytics.js')}}"></script><script type="text/javascript" async="" src=""></script><script async="" src="{{url_for('static', filename='./js/tag.js')}}"></script><script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async="" src="(1)"></script>
 <script>

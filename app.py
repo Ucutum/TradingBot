@@ -10,9 +10,11 @@ from data.stocks import Stock
 from data.companies import Company
 import os
 import csv
+import subprocess
 
 
 global_init(os.path.join("db", "database.db"))
+run_command = ["./TradingBot"] 
 
 
 login_manager = LoginManager(app)
@@ -70,10 +72,6 @@ def dashboard_page(company_token):
         for row in spamreader:
             paid_companies.append({"title" : row[0], "active" : False, "token" : row[1]})
 
-        # print(d['title'])
-        
-        # paid_companies.append({"title" : d['title'], "active" : False, "token" : d['token']})
-
     for company in paid_companies:
         if company["token"] == company_token:
             company["active"] = True
@@ -86,7 +84,23 @@ def dashboard_page(company_token):
 
 @app.route("/futer")
 def futer_page():
-    return render_template('futer_page.html')
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(my_path, "gdata", "package_NASDAQ.txt")
+    subprocess.run(run_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    
+    shares = list()
+    data = dict()
+
+    with open(path, "r", newline="") as f:
+        lines = f.readlines()
+        for item in lines:
+            title, cost = item.split()
+            if title == "MONEY": data[title] = cost
+            else: shares.append({"title" : title, "cost" : cost})
+
+    data['current_shares'] = shares
+
+    return render_template('futer_page.html', **data)
 
 @app.route("/futer2")
 def futer_page2():
