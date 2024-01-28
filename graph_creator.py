@@ -41,6 +41,8 @@ def main():
     print(companies)
 
     for company in companies:
+        print("!!!!!")
+        print(company)
         data = request_stocks(date(2020, 1, 1), date(2024, 1, 26), company)
         # data = read_data("models/YNDX_000101_240101.csv", delimiter=';')
         x = np.array([np.array(data[["open", "close"]].mean(axis=1))[-100:]])
