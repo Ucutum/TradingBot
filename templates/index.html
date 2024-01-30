@@ -63,9 +63,11 @@
         <li class="nav-item active">
           <a class="nav-link" aria-current="page" href="{{ url_for('index_page') }}">Главная</a>
         </li>
+        {% if not current_user.subscription %}
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('cost_page') }}">Cost</a>
         </li>
+        {% endif %}
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('cover_page') }}">Cover</a>
         </li>
@@ -78,12 +80,34 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('ai_strategy_page') }}">Cтратегия от AI</a>
         </li>
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('logout') }}">Разлогиниться</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('singup_page') }}">Регистрация</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('login_page') }}">Логин</a>
+        </li>
+        {% endif %}
       </ul>
       <!-- <form class="d-flex">
         <input class="form-control mr-2" type="search" placeholder="Поиск" aria-label="Search">
         <button class="btn btn-outline-success" type="submit">ОК</button>
       </form> -->
     </div>
+    {% if current_user.is_authenticated %}
+      {% if current_user.subscription %}
+      <h5>Подписка активна</h5>
+      {% else %}
+      <h5>Подписка не активна</h5>
+      {% endif %}
+    <h5>{{ current_user.name }}</h5>
+    {% else %}
+    <h5>Гость</h5>
+    {% endif %}
   </div>
 </nav>
 

@@ -1,15 +1,16 @@
+
 {% extends 'index.html' %}
 
 {% block head %}
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="index, follow"><link rel="canonical" href="https://bootstrap5.ru/examples/sign-in">
-<meta name="description" content="Индивидуальный макет формы и дизайн для простой формы входа.">
+<meta name="robots" content="index, follow"><link rel="canonical" href="https://bootstrap5.ru/examples/cover">
+<meta name="description" content="Одностраничный bootstrap 5 шаблон для создания простых и красивых домашних страниц.">
 <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors, Alexey Golyagin">
 <meta name="docsearch:language" content="ru">
 <meta name="docsearch:version" content="5.0">
-<title>Бесплатный bootstrap 5 шаблон - Вход в систему</title>
+<title>Бесплатный bootstrap 5 шаблон - Обложка</title>
 <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="{{url_for('static', filename='./css/bootstrap.min.css')}}" crossorigin="anonymous">
 <link rel="stylesheet" href="{{url_for('static', filename='./css/docs.css')}}">
@@ -22,15 +23,15 @@
 <link rel="icon" href="https://bootstrap5.ru/img/favicons/favicon.ico">
 <meta name="theme-color" content="#7952b3">
 <!-- Facebook -->
-<meta property="og:url" content="https://bootstrap5.ru/examples/sign-in">
-<meta property="og:title" content="Бесплатный bootstrap 5 шаблон - Вход в систему">
-<meta property="og:description" content="Индивидуальный макет формы и дизайн для простой формы входа.">
+<meta property="og:url" content="https://bootstrap5.ru/examples/cover">
+<meta property="og:title" content="Бесплатный bootstrap 5 шаблон - Обложка">
+<meta property="og:description" content="Одностраничный bootstrap 5 шаблон для создания простых и красивых домашних страниц.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://bootstrap5.ru/img/examples/sign-in.png">
+<meta property="og:image" content="https://bootstrap5.ru/img/examples/cover.png">
 <meta property="og:image:type" content="image/jpg">
 <meta property="og:image:width" content="1000">
 <meta property="og:image:height" content="500">
-    <style>
+<style>
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -46,23 +47,21 @@
         }
       }
     </style>
-
-    
     <!-- Custom styles for this template -->
-    <link href="{{url_for('static', filename='./css/signin.css')}}" rel="stylesheet"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9">
+    <link href="{{url_for('static', filename='./css/cover.css')}}" rel="stylesheet"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9">
 {% endblock head %}
 
 {% block body %}
-<!-- saved from url=(0038)https://bootstrap5.ru/examples/sign-in -->
-<html lang="ru" prefix="og: http://ogp.me/ns#"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- saved from url=(0036)https://bootstrap5.ru/examples/cover -->
+<html lang="ru" prefix="og: http://ogp.me/ns#" class="h-100"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="index, follow"><link rel="canonical" href="https://bootstrap5.ru/examples/sign-in">
-<meta name="description" content="Индивидуальный макет формы и дизайн для простой формы входа.">
+<meta name="robots" content="index, follow"><link rel="canonical" href="https://bootstrap5.ru/examples/cover">
+<meta name="description" content="Одностраничный bootstrap 5 шаблон для создания простых и красивых домашних страниц.">
 <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors, Alexey Golyagin">
 <meta name="docsearch:language" content="ru">
 <meta name="docsearch:version" content="5.0">
-<title>Бесплатный bootstrap 5 шаблон - Вход в систему</title>
+<title>Бесплатный bootstrap 5 шаблон - Обложка</title>
 <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="{{url_for('static', filename='./css/bootstrap.min.css')}}" crossorigin="anonymous">
 <link rel="stylesheet" href="{{url_for('static', filename='./css/docs.css')}}">
@@ -75,15 +74,15 @@
 <link rel="icon" href="https://bootstrap5.ru/img/favicons/favicon.ico">
 <meta name="theme-color" content="#7952b3">
 <!-- Facebook -->
-<meta property="og:url" content="https://bootstrap5.ru/examples/sign-in">
-<meta property="og:title" content="Бесплатный bootstrap 5 шаблон - Вход в систему">
-<meta property="og:description" content="Индивидуальный макет формы и дизайн для простой формы входа.">
+<meta property="og:url" content="https://bootstrap5.ru/examples/cover">
+<meta property="og:title" content="Бесплатный bootstrap 5 шаблон - Обложка">
+<meta property="og:description" content="Одностраничный bootstrap 5 шаблон для создания простых и красивых домашних страниц.">
 <meta property="og:type" content="website">
-<meta property="og:image" content="https://bootstrap5.ru/img/examples/sign-in.png">
+<meta property="og:image" content="https://bootstrap5.ru/img/examples/cover.png">
 <meta property="og:image:type" content="image/jpg">
 <meta property="og:image:width" content="1000">
 <meta property="og:image:height" content="500">
-    <style>
+<style>
       .bd-placeholder-img {
         font-size: 1.125rem;
         text-anchor: middle;
@@ -99,35 +98,33 @@
         }
       }
     </style>
-
-    
     <!-- Custom styles for this template -->
-    <link href="{{url_for('static', filename='./css/signin.css')}}" rel="stylesheet"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"></head>
-<body class="text-center">
-  <form class="form-signin" method="post">
-    {{ form.hidden_tag() }}
-    <img class="mb-4" src="" alt="логотип bootstrap" width="72" height="72">
-    <h1 class="h3 mb-3 font-weight-normal">Пожалуйста зарегестрируйтесь</h1>
-    {% for message in get_flashed_messages() %}
-  <div class="alert alert-danger" role="alert">
-      {{ message }}
-  </div>
-  {% endfor %}
+    <link href="{{url_for('static', filename='./css/cover.css')}}" rel="stylesheet"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"></head>
+<body class="d-flex h-100 text-center text-white bg-dark">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <header class="mb-auto">
     <div>
-      {{ form.username(class="form-control mb-0", placeholder="UserName") }}
-      {% for error in form.username.errors %}
-          <span style="color: red;">{{ error }}</span>
-      {% endfor %}
+      <h3 class="float-md-left mb-0">Обложка</h3>
+      <nav class="nav nav-masthead justify-content-center float-md-right">
+        <a class="nav-link active" aria-current="page" href="https://bootstrap5.ru/examples/cover#">Главная</a>
+        <a class="nav-link" href="https://bootstrap5.ru/examples/cover#">Особенности</a>
+        <a class="nav-link" href="https://bootstrap5.ru/examples/cover#">Контакты</a>
+      </nav>
     </div>
-    <div>
-      {{ form.password(class="form-control mb-0", placeholder="Password") }}
-      {% for error in form.password.errors %}
-          <span style="color: red;">{{ error }}</span>
-      {% endfor %}
-    </div>
-    {{ form.submit(class="form-control") }}
-    <p class="mt-5 mb-3 text-muted">©____-____</p>
-  </form><script type="text/javascript" async="" src="{{url_for('static', filename='./js/analytics.js')}}"></script><script type="text/javascript" async="" src=""></script><script async="" src="{{url_for('static', filename='./js/tag.js')}}"></script><script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>
+  </header>
+
+  <main class="px-3">
+    <h1>Поздравляем с получением подписки!</h1>
+    <p class="lead">Обложка - это одностраничный шаблон для создания простых и красивых домашних страниц. Загрузите, отредактируйте текст и добавьте свою собственную полноэкранную фоновую фотографию, чтобы сделать ее своей собственной.</p>
+    <p class="lead">
+      <a href="https://bootstrap5.ru/examples/cover#" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">Подробнее</a>
+    </p>
+  </main>
+
+  <footer class="mt-auto text-white-50">
+    <p>Шаблон обложки для <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, от <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
+  </footer>
+</div><script type="text/javascript" async="" src="{{url_for('static', filename='./js/analytics.js')}}"></script><script type="text/javascript" async="" src=""></script><script async="" src="{{url_for('static', filename='./js/tag.js')}}"></script><script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async="" src="(1)"></script>
 <script>
