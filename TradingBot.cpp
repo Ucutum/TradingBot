@@ -35,13 +35,26 @@ void load_data(string name) {
     graph g;
     string s;
     getline(fin, s);
+    s.push_back(';');
+    ll ncnt = 0;
+    string curs = "";
+    for (auto sym : s) {
+        if (sym == ';') {
+            if (curs == "close") break;
+            curs = "";
+            ncnt++;
+            continue;
+        }
+        if (sym >= 'A' && sym <= 'Z') sym = 'a' + (sym - 'A');
+        curs.push_back(sym);
+    }
     while (getline(fin, s)) {
         ll cnt = 0;
         string num = "";
         for (auto sym : s) {
             if (sym == ' ') continue;
             if (sym == ',') sym = '.';
-            if (cnt == 2 && sym != ';') num.push_back(sym);
+            if (cnt == ncnt && sym != ';') num.push_back(sym);
             if (sym == ';') cnt++;
         }
         if (num.empty()) continue;
@@ -51,9 +64,12 @@ void load_data(string name) {
     companies.push_back(g);
 }
 
+ll g1 = 0, b1 = 0;
+
 struct tradeBot {
     dl aggressiveness = 1;
     string username;
+    string exchange;
     dl balance = 0;
     dl summary = 0;
     dl commission = 0.0000;
@@ -64,32 +80,23 @@ struct tradeBot {
     vector<dl> cur_max;
     vector<dl> fall_size;
     vector<ll> delay;
+
+    //a
+    vector<dl> buy_cost;
+
     ll del = 15;
-    ofstream ad_fout = ofstream("gdata/Advice.txt");
+    ofstream ad_fout; //= ofstream("gdata/Advice.txt");
     ll curtime = 2200;
     ll bought = 0;
     ll mxcnt = 10;
     bool on_screen = true;
 
     void save_package() {
-        ofstream pack_fout = ofstream("gdata/Package.txt");
+        ofstream pack_fout = ofstream("gdata/Package_" + exchange + ".txt");
         pack_fout << "MONEY " << balance << endl;
         for (ll i = 0; i < company_count; i++) {
             pack_fout << company_names[i] << " " << share_count[i] << endl;
         }
-    }
-
-    bool check_user() {
-        ifstream fin("users.txt");
-        string cur_name;
-        while (getline(fin, cur_name)) {
-            if (cur_name == username) return true;
-        }
-        return false;
-    }
-
-    void new_user() {
-
     }
 
     tradeBot(dl aggressiveness = 1, dl commission = 0.0005) : aggressiveness(aggressiveness), commission(commission) {
@@ -98,10 +105,12 @@ struct tradeBot {
         cur_max.resize(company_count);
         fall_size.resize(company_count);
         delay.resize(company_count);
+        buy_cost.resize(company_count);
 
-        //ifstream fin("username.txt");
-        //fin >> username;
-        //if (!check_user) new_user();
+        ifstream fin("exchangeName.txt");
+        fin >> exchange;
+
+        ad_fout = ofstream("gdata/Advice_" + exchange + ".txt");
     }
 
     void sell(ll id) {
@@ -109,6 +118,10 @@ struct tradeBot {
         share_count[id] = 0;
         cur_max[id] = 0;
         fall_size[id] = 0;
+
+        dl cst = companies[id][companies[id].size() - 1 - curtime].close;
+        if (cst > buy_cost[id]) g1++;
+        else b1++;
 
         if (on_screen) cout << "SELL ALL of " << company_names[id] << endl;
         else {
@@ -124,6 +137,7 @@ struct tradeBot {
         cnt = (ll)cnt;
         if ((ll)cnt == 0) return;
         share_count[id] += cnt;
+        buy_cost[id] = companies[id][companies[id].size() - 1 - curtime].close;
         balance -= cnt * companies[id][companies[id].size() - 1 - curtime].close * ((dl)1 + commission);
         cur_max[id] = companies[id][companies[id].size() - 1 - curtime].close;
         fall_size[id] = fall_sz;
@@ -171,7 +185,7 @@ struct tradeBot {
                 dl cur_up = (cur / companies[i][t].close - 1) * 100;
                 dl cur_strength = (cur_up) / ((max_fall - 1) * 100 + aggressiveness);
                 cur_strength *= ((cur / cur_max) - 0.9) * 10;
-                if (cur_strength > strength && companies[i].size() - 1 - curtime - t > min_trend_size) {
+                if ((cur_strength > strength || cur_strength == strength && max_fall < mx_str_fall) && companies[i].size() - 1 - curtime - t > min_trend_size) {
                     strength = cur_strength;
                     mx_str_fall = max_fall;
                 }
@@ -215,10 +229,10 @@ struct tradeBot {
     }
 
     void save_data() {
-        ofstream fout("gdata/balance");
+        ofstream fout("gdata/balance_" + exchange);
         fout << balance;
         for(ll i = 0; i < company_count; i++){
-            fout = ofstream("gdata/" + company_names[i]);
+            fout = ofstream("gdata/" + company_names[i] + "_" + exchange);
             fout << share_count[i] << endl;
             fout << cur_max[i] << endl;
             fout << fall_size[i] << endl;
@@ -227,10 +241,10 @@ struct tradeBot {
     }
 
     void load_data() {
-        ifstream fin("gdata/balance");
+        ifstream fin("gdata/balance_" + exchange);
         fin >> balance;
         for (ll i = 0; i < company_count; i++) {
-            fin = ifstream("gdata/" + company_names[i]);
+            fin = ifstream("gdata/" + company_names[i] + "_" + exchange);
             fin >> share_count[i];
             fin >> cur_max[i];
             fin >> fall_size[i];
@@ -262,6 +276,8 @@ void simulate(ll day0) {
         //Sleep(300);
     }
     //tb.save_data();
+    cout << "good : " << g1 << endl;
+    cout << "bad : " << b1 << endl;
 }
 
 void help() {
@@ -286,7 +302,6 @@ void rebuild(ll money) {
 int main() {
     cout << fixed;
     cout.precision(2);
-
     string foldername = "graphs";
     ifstream fin("all.csv");
     string s;
@@ -302,7 +317,7 @@ int main() {
         company_names.push_back(s2);
     }
 
-    // simulate(250);
-    // rebuild(100000);
-    help();
+    //simulate(20);
+    rebuild(1000000);   //раскоментировать - prepareFiles
+    help();             //раскоментировать - redistribute
 }

@@ -3,6 +3,7 @@ import mplfinance as mpf
 import requests
 import datetime
 import yfinance as yf
+import csv
 
 def request_stocks(start: datetime.datetime, symbol: str):
     data = yf.download(symbol, period="1d", start=start.strftime("%Y-%m-%d"))
@@ -17,6 +18,12 @@ def write_data(df: pd.DataFrame, filename):
     
 
 if __name__ == '__main__':
-    # request_stocks(datetime.datetime(2020, 1, 1), "NVDA")
-    write_data(request_stocks(datetime.datetime(2000, 1, 1), "AAPL"), "AAPL.csv")
-    # print(read_data("AAPL.csv"))
+    write_data(request_stocks(datetime.datetime(2000, 1, 1), "GOOG"), "graphs/GOOG.csv")
+    write_data(request_stocks(datetime.datetime(2000, 1, 1), "AAPL"), "graphs/AAPL.csv")
+
+    with open('all.csv', newline='', encoding="utf-8") as f:
+        spamreader = csv.reader(f, delimiter=';')
+
+        for row in spamreader:
+            write_data(request_stocks(datetime.datetime(2000, 1, 1), row[1]), f"graphs/{row[1]}.csv")
+

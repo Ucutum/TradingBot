@@ -9,9 +9,12 @@ from data.users import User
 from data.stocks import Stock
 from data.companies import Company
 import os
+import csv
+import subprocess
 
 
 global_init(os.path.join("db", "database.db"))
+run_command = ["./TradingBot"] 
 
 
 login_manager = LoginManager(app)
@@ -54,50 +57,21 @@ def cover_page():
 
 @app.route('/dashboard/<company_token>')
 def dashboard_page(company_token):
-    if company_token == "first":
-        company_token = "GOGL"
     free_companies = [
-        {"title": "Google", "active": False, "token": "GOGL"},
-        {"title": "Вконтакте", "active": False, "token": "VKCO"}
+        {"title": "Google", "active": False, "token": "GOOG"},
+        {"title": "Apple", "active": False, "token": "AAPL"}
     ]
     for company in free_companies:
         if company["token"] == company_token:
             company["active"] = True
-    paid_companies = [
-        {"title": "Сбербанк", "active": False, "token": "SBER"},
-        {"title": "Тинькофф", "active": False, "token": "TCSG"},
-        {"title": "Яндекс", "active": False, "token": "YNDX"},
-        {"title": "Газпром", "active": False, "token": "GAZP"},
-        {"title": "Татнефть", "active": False, "token": "TATN"},
-        {"title": "Мечел", "active": False, "token": "MTLR"},
-        {"title": "Лукойл", "active": False, "token": "LKOH"},
-        {"title": "Аэрофлот", "active": False, "token": "AFLT"},
-        {"title": "Сургутнефтегаз", "active": False, "token": "SNGS"},
-        {"title": "МТС", "active": False, "token": "MTSS"},
-        {"title": "Магнит", "active": False, "token": "MGNT"},
-        {"title": "Новатэк", "active": False, "token": "NVTK"},
-        {"title": "М.Видео", "active": False, "token": "MVID"},
-        {"title": "Татнефть", "active": False, "token": "TATN"},
-        {"title": "НЛМК", "active": False, "token": "NLMK"},
-        {"title": "Эн+", "active": False, "token": "ENPG"},
-        {"title": "ММК", "active": False, "token": "MAGN"},
-        {"title": "Северсталь", "active": False, "token": "CHMF"},
-        {"title": "АФК Система", "active": False, "token": "AFKS"},
-        {"title": "Трубная Металлургическая Компания", "active": False, "token": "TRMK"},
-        {"title": "Мосэнерго", "active": False, "token": "MSNG"},
-        {"title": "ФосАгро", "active": False, "token": "PHOR"},
-        {"title": "РусГидро", "active": False, "token": "HYDR"},
-        {"title": "Полюс", "active": False, "token": "PLZL"},
-        {"title": "АЛРОСА", "active": False, "token": "ALRS"},
-        {"title": "РосНефть", "active": False, "token": "RNFT"},
-        {"title": "КАМАЗ", "active": False, "token": "KMAZ"},
-        {"title": "Россети Московский Регион", "active": False, "token": "MSRS"},
-        {"title": "Детский Мир", "active": False, "token": "DSKY"},
-        {"title": "Группа Черкизово", "active": False, "token": "GCHE"},
-        {"title": "Совкомфлот", "active": False, "token": "FLOT"},
-        {"title": "СОЛЛЕРС", "active": False, "token": "SVAV"},
-        {"title": "Юнипро", "active": False, "token": "UPRO"},
-    ]
+
+    paid_companies = list()
+    with open('all.csv', newline='', encoding="utf-8") as f:
+        spamreader = csv.reader(f, delimiter=';')
+
+        for row in spamreader:
+            paid_companies.append({"title" : row[0], "active" : False, "token" : row[1]})
+
     for company in paid_companies:
         if company["token"] == company_token:
             company["active"] = True
@@ -110,7 +84,33 @@ def dashboard_page(company_token):
 
 @app.route("/futer")
 def futer_page():
-    return render_template('futer_page.html')
+    my_path = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(my_path, "gdata", "package_NASDAQ.txt")
+    subprocess.run(run_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    
+    shares = list()
+    data = dict()
+
+    with open(path, "r", newline="") as f:
+        lines = f.readlines()
+        for item in lines:
+            title, cost = item.split()
+            if title == "MONEY": data[title] = cost
+            else: shares.append({"title" : title, "cost" : cost})
+
+    data['current_shares'] = shares
+
+    return render_template('futer_page.html', **data)
+
+@app.route("/ai_strategy")
+def ai_strategy_page():
+    with open("all.csv") as f:
+        companies = [i for i in csv.reader(f, delimiter=";")]
+    graphs = [
+        {"name": i[0],
+         "img":f"graph/{i[1]}_graph.png"}
+               for i in companies]
+    return render_template('ai_strategy.html', graphs=graphs)
 
 @app.route("/logiin")
 def login_page():
@@ -129,7 +129,7 @@ def error404page(error):
     }
     return render_template('error_page.html', **data), 404
 
-    
+
 @app.errorhandler(403)
 def error403page(error):
     data = {
