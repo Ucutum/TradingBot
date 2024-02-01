@@ -50,11 +50,16 @@
       section p{
         color:rgb(226, 250, 11); 
         text-shadow: 2px 2px 2px #000000;
+        font-size: 48px;
       }
-      section {
+      section h1 {
         color:rgb(226, 250, 11); 
         text-shadow: 4px 4px 4px #000000;
-        font-size: 56px;
+        font-size: 84px;
+      } 
+      body {
+        background-image: url(static/pictures/legion-abstract-8k-5p-2880x1800.jpg);
+        background-size:contain;
       }
     </style>
     <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -62,11 +67,11 @@
 {% endblock head %}
 
 {% block body %}
-<body style="background-image: url(static/pictures/4605.jpg);">
+<body>
 <script type="text/javascript">
   $(document).ready(function(){$("img").click(function(){this.requestFullscreen()})});
 </script>
-<header>
+<header>  
   <div class="collapse bg-dark" id="navbarHeader">
     <div class="container"> 
       <div class="row"> 
@@ -102,14 +107,12 @@
 
   <section class="py-5 text-center container">
     <div class="row py-lg-5">
-      <div class="col-lg-6 col-md-8 mx-auto">
-        <h1 style="font-size: 48px;">Данные от нейросети</h1>
-        <p style="font-size: 24px;">Здесь вы можете посмотреть графики предсказаний от нашей нейросети!</p>
-      </div>
+        <h1>Данные от нейросети</h1>
+        <p>Здесь вы можете посмотреть графики предсказаний от нашей нейросети!</p>
     </div>  
   </section>    
 
-  <div class="album py-5 bg-light">
+  <div>
     <div class="container">
 
       <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
