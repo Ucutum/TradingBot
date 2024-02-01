@@ -21,6 +21,7 @@ def craete_graph(data, company_token):
     data.set_index('date', inplace=True)
     d = data.index[-6]
     print("!!!", d)
+    print(data)
     mpf.plot(
         data, type='candle',
         savefig=f"static/graph/{company_token}_graph.png",
@@ -44,11 +45,9 @@ def remove_trailing_empty_lines(file_path):
 def main():
     with open("all.csv") as f:
         companies = [e[1] for e in csv.reader(f, delimiter=";")]
-    print(companies)
+    # companies = ["QIWI"]
 
     for company in companies:
-        print("!!!!!")
-        print(company)
         write_data(request_stocks(datetime.datetime(2000, 1, 1), company), "models/" + company + ".csv")
         remove_trailing_empty_lines(f"models/{company}.csv")
         data = read_data(f"models/{company}.csv", delimiter=';')
@@ -57,20 +56,21 @@ def main():
         x, mxx = grounding_one(x)
         model = load_model(f"models/{company}_model.h5")
         p = model.predict(x)
-        p = ungrounding_one(p, mxx)[0]
-        print(data.head(5))
-        print(data.columns)
+        p = ungrounding_one(p, mxx)[0].tolist()
+
+        print(data[-100:].tail(6))
 
         last = data['Close'][len(data) - 1]
         for i in range(5):
-            print(len(data))
-            print(data.iloc[-1])
-            print(data.iloc[-1])
             last_date = data["Date"].iloc[-1]
             next_day = last_date + timedelta(days=1)
             # Date;Open;High;Low;Close;Adj Close;Volume
+            if str(p[i]) == "nan":
+                p[i] = last
+                print("WARNING NAN")
+            print(p[i])
             prow = {
-                'Date': last_date,
+                'Date': next_day,
                 'Open': last,
                 'High': max(last, p[i]) + 1,
                 'Low': min(last, p[i]) - 1,
@@ -78,7 +78,9 @@ def main():
                 'Volume': 0,
             }
             last = p[i]
-            data.loc[next_day] = prow
+            data.loc[len(data)] = prow
+            # data[len(data)] = prow
+        print(data[-100:].tail(6))
         craete_graph(data[-100:], company)
 
 
