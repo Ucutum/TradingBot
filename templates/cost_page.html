@@ -79,7 +79,7 @@
   </div>
   
   <div class="container">
-    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+    <div class="row row-cols-1 row-cols-md-2 mb-3 text-center" style="width: 80%; margin: 0 auto">
       <div class="col">
         <div class="card mb-4 shadow-sm" style="background-color: #18042a;border:3px solid rgb(62, 5, 43)">
         <div class="card-header">
@@ -93,7 +93,7 @@
             <li>Поддержка по email</li> 
             <li>Недоступна нейросеть</li>
           </ul>
-          <form action="/dashboard/first">
+          <form action="{{ url_for('dashboard_page', company_token='first') }}">
             <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Подпишитесь бесплатно</button>
           </form>
         </div>    
@@ -112,13 +112,13 @@
             <li>Приоритетная поддержка по email</li>
             <li>Доступ к нейросети</li>
           </ul>
-          <form action="/ordering">
+          <form method="post">
             <button type="submit" class="btn btn-lg btn-block btn-primary">Начать</button>
           </form>
         </div>
       </div>
       </div>
-      <div class="col">
+      <!-- <div class="col">
         <div class="card mb-4 shadow-sm" style="background-color: #18042a;border:3px solid rgb(62, 5, 43)">
         <div class="card-header">
           <h4 class="my-0 font-weight-normal">Enterprise</h4>
@@ -135,7 +135,7 @@
             <button type="submit" class="btn btn-lg btn-block btn-primary">Погнали!</button>
           </form>
         </div>
-      </div>
+      </div> -->
       </div>
     </div>
 </div>

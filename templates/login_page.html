@@ -1,4 +1,3 @@
-
 {% extends 'index.html' %}
 
 {% block head %}
@@ -105,21 +104,30 @@
     <!-- Custom styles for this template -->
     <link href="{{url_for('static', filename='./css/signin.css')}}" rel="stylesheet"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"></head>
 <body class="text-center">
-<form class="form-signin">
-  <img class="mb-4" src="" alt="логотип bootstrap" width="72" height="72">
-  <h1 class="h3 mb-3 font-weight-normal">Пожалуйста войдите</h1>
-  <label for="inputEmail" class="sr-only">Email</label>
-  <input type="email" id="inputEmail" class="form-control" placeholder="Email" required="" autofocus="">
-  <label for="inputPassword" class="sr-only">Пароль</label>
-  <input type="password" id="inputPassword" class="form-control" placeholder="Пароль" required="">
-  <div class="checkbox mb-3">
-    <label>
-      <input type="checkbox" value="remember-me"> Запомнить меня
-    </label>
+  <form class="form-signin" method="post">
+    {{ form.hidden_tag() }}
+    <img class="mb-4" src="" alt="логотип bootstrap" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Пожалуйста зарегестрируйтесь</h1>
+    {% for message in get_flashed_messages() %}
+  <div class="alert alert-danger" role="alert">
+      {{ message }}
   </div>
-  <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
-  <p class="mt-5 mb-3 text-muted">© 2017-2020</p>
-</form><script type="text/javascript" async="" src="{{url_for('static', filename='./js/analytics.js')}}"></script><script type="text/javascript" async="" src=""></script><script async="" src="{{url_for('static', filename='./js/tag.js')}}"></script><script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>
+  {% endfor %}
+    <div>
+      {{ form.username(class="form-control mb-0", placeholder="UserName") }}
+      {% for error in form.username.errors %}
+          <span style="color: red;">{{ error }}</span>
+      {% endfor %}
+    </div>
+    <div>
+      {{ form.password(class="form-control mb-0", placeholder="Password") }}
+      {% for error in form.password.errors %}
+          <span style="color: red;">{{ error }}</span>
+      {% endfor %}
+    </div>
+    {{ form.submit(class="form-control") }}
+    <p class="mt-5 mb-3 text-muted">©____-____</p>
+  </form><script type="text/javascript" async="" src="{{url_for('static', filename='./js/analytics.js')}}"></script><script type="text/javascript" async="" src=""></script><script async="" src="{{url_for('static', filename='./js/tag.js')}}"></script><script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async="" src="(1)"></script>
 <script>

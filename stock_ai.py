@@ -11,22 +11,11 @@ import numpy as np
 import tensorflow as tf
 import pandas as pd
 from keras.models import load_model
+from csv_parser import write_data, request_stocks
+import csv
+import datetime
+from learning_ai import read_data
 
-def read_data(filename, delimiter='\t'):
-    data = pd.read_csv(filename, delimiter=delimiter)
-    data = data[['<DATE>', '<OPEN>', '<HIGH>', '<LOW>', '<CLOSE>', '<VOL>']]
-    data['<DATE>'] = pd.to_datetime(data['<DATE>'], format='%d/%m/%y')
-    data['<OPEN>'] = pd.to_numeric(data['<OPEN>'])
-    data['<HIGH>'] = pd.to_numeric(data['<HIGH>'])
-    data['<LOW>'] = pd.to_numeric(data['<LOW>'])
-    data['<CLOSE>'] = pd.to_numeric(data['<CLOSE>'])
-    data['<VOL>'] = pd.to_numeric(data['<VOL>'])
-    # data.rename(columns={}, inplace=True)
-    # data.set_index('Date', inplace=True)
-    data.rename(columns={
-        '<OPEN>': 'Open', '<HIGH>': 'High', '<LOW>': 'Low', '<CLOSE>': 'Close',
-        '<VOL>': 'Volume', "<DATE>": "Date"}, inplace=True)
-    return data
 
 def slice_to_sections(data, x_sections_cnt, y_sections_cnt):
   sections_cnt = x_sections_cnt + y_sections_cnt
@@ -130,15 +119,22 @@ def make_selections(x, y, pl, mxx):
 
 
 def main():
-  data = read_data("models/YNDX_000101_240101.csv", delimiter=';')
-  data = np.array(data[["Open", "Close"]].mean(axis=1))
-  print(len(data))
-  x, y, mxx = generate(data, 100, 5)
-  print(len(x), len(y), len(mxx))
-  # loading
-  model = load_model("models/YNDX_model.h5")
-  p = model.predict(x)
-  print(p)
+  with open("all.csv") as f:
+    companies = [e[1] for e in csv.reader(f, delimiter=";")]
+  companies = companies
+  for c in companies:
+    print(f"Downloadding data {c}")
+    write_data(request_stocks(datetime.datetime(2000, 1, 1), c), "models/" + c + ".csv")
+    print(f"Predictng {c}")
+    data = read_data(f"models/{c}.csv", delimiter=';')
+    data = np.array(data[["Open", "Close"]].mean(axis=1))
+    print(len(data))
+    x, y, mxx = generate(data, 100, 5)
+    print(len(x), len(y), len(mxx))
+    # loading
+    model = load_model(f"models/{c}_model.h5")
+    p = model.predict(x)
+    print(p)
 
 
 if __name__ == '__main__':
