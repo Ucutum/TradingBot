@@ -1,0 +1,3 @@
+MGNT 1
+CHMF 46
+VKCO 37
