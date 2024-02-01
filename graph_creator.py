@@ -7,27 +7,21 @@ import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
 import csv
-
-
-def read_data(filename):
-    data = pd.read_csv(filename, delimiter=';')
-    data = data[['<DATE>', '<OPEN>', '<HIGH>', '<LOW>', '<CLOSE>', '<VOL>']]
-    data['<DATE>'] = pd.to_datetime(data['<DATE>'], format='%d/%m/%y')
-    data['<OPEN>'] = pd.to_numeric(data['<OPEN>'])
-    data['<HIGH>'] = pd.to_numeric(data['<HIGH>'])
-    data['<LOW>'] = pd.to_numeric(data['<LOW>'])
-    data['<CLOSE>'] = pd.to_numeric(data['<CLOSE>'])
-    data['<VOL>'] = pd.to_numeric(data['<VOL>'])
-    data.set_index('<DATE>', inplace=True)
-    data.rename(columns={
-        '<OPEN>': 'Open', '<HIGH>': 'High', '<LOW>': 'Low', '<CLOSE>': 'Close',
-        '<VOL>': 'Volume'}, inplace=True)
-    return data
+from learning_ai import read_data
+from csv_parser import write_data, request_stocks
+import csv
+import datetime
     
 
 def craete_graph(data, company_token):
+    data.rename(columns={
+        'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close', 'Volume': 'volume',
+        'Date': 'date'
+    }, inplace=True)
+    data.set_index('date', inplace=True)
     d = data.index[-6]
     print("!!!", d)
+    print(data)
     mpf.plot(
         data, type='candle',
         savefig=f"static/graph/{company_token}_graph.png",
@@ -35,36 +29,58 @@ def craete_graph(data, company_token):
                     linewidths=1, alpha=0.5))
 
 
+def remove_trailing_empty_lines(file_path):
+    try:
+        with open(file_path, 'r') as file:
+            lines = file.readlines()
+        while lines and lines[-1].isspace():
+            lines.pop()
+        with open(file_path, 'w') as file:
+            file.writelines(lines)
+        print(f"Removed trailing empty lines from {file_path}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+
+
 def main():
     with open("all.csv") as f:
         companies = [e[1] for e in csv.reader(f, delimiter=";")]
-    print(companies)
+    # companies = ["QIWI"]
 
     for company in companies:
-        data = request_stocks(date(2020, 1, 1), date(2024, 1, 26), company)
+        write_data(request_stocks(datetime.datetime(2000, 1, 1), company), "models/" + company + ".csv")
+        remove_trailing_empty_lines(f"models/{company}.csv")
+        data = read_data(f"models/{company}.csv", delimiter=';')
         # data = read_data("models/YNDX_000101_240101.csv", delimiter=';')
-        x = np.array([np.array(data[["open", "close"]].mean(axis=1))[-100:]])
+        x = np.array([np.array(data[["Open", "Close"]].mean(axis=1))[-100:]])
         x, mxx = grounding_one(x)
         model = load_model(f"models/{company}_model.h5")
         p = model.predict(x)
-        p = ungrounding_one(p, mxx)[0]
+        p = ungrounding_one(p, mxx)[0].tolist()
 
-        last = data['close'][-1]
+        print(data[-100:].tail(6))
+
+        last = data['Close'][len(data) - 1]
         for i in range(5):
-            last_date = data.index[-1]
+            last_date = data["Date"].iloc[-1]
             next_day = last_date + timedelta(days=1)
+            # Date;Open;High;Low;Close;Adj Close;Volume
+            if str(p[i]) == "nan":
+                p[i] = last
+                print("WARNING NAN")
+            print(p[i])
             prow = {
-                # 'begin': last_date,
-                'open': last,
-                'high': max(last, p[i]) + 1,
-                'low': min(last, p[i]) - 1,
-                'close': p[i],
-                'value': 0,
-                'quantity': 0,
-                'end': 0
+                'Date': next_day,
+                'Open': last,
+                'High': max(last, p[i]) + 1,
+                'Low': min(last, p[i]) - 1,
+                'Close': p[i],
+                'Volume': 0,
             }
             last = p[i]
-            data.loc[next_day] = prow
+            data.loc[len(data)] = prow
+            # data[len(data)] = prow
+        print(data[-100:].tail(6))
         craete_graph(data[-100:], company)
 
 
