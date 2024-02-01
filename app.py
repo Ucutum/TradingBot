@@ -1,5 +1,5 @@
-from flask import Flask, render_template, url_for, abort, redirect
-from flask_login import LoginManager
+from flask import Flask, render_template, url_for, abort, redirect, request, flash
+from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'your_secret_key'
@@ -12,6 +12,9 @@ import os
 import csv
 import subprocess
 
+from forms.login_form import LogInForm
+from forms.singup_form import SingUpForm
+
 
 global_init(os.path.join("db", "database.db"))
 run_command = ["./TradingBot"] 
@@ -20,9 +23,11 @@ run_command = ["./TradingBot"]
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
+
 @login_manager.user_loader
 def load_user(user_id):
-    return create_session().query(User).get(user_id == user_id).first()
+    session = create_session()
+    return session.query(User).get(int(user_id))
 
 
 @app.route('/')
@@ -47,8 +52,28 @@ def e500():
     return redirect(abort(500))
 
 
-@app.route('/cost')
+@app.route('/subscription_purchased')
+def subscription_purchased_page():
+    if not current_user.is_authenticated:
+        return abort(403)
+    return render_template('subscription_purchased_page.html')
+
+
+@app.route('/cost', methods=['GET', 'POST'])
 def cost_page():
+    if current_user.is_authenticated:
+        if current_user.subscription:
+            return redirect(url_for('subscription_purchased_page'))
+    if request.method == 'POST':
+        if not current_user.is_authenticated:
+            flash("Войдите в систему для покупки")
+            return redirect(url_for('login_page'))
+        else:
+            session = create_session()
+            user = session.query(User).get(current_user.id)
+            user.subscription = True
+            session.commit()
+            return redirect(url_for('subscription_purchased_page'))
     return render_template('cost_page.html')
 
 @app.route('/cover')
@@ -112,9 +137,61 @@ def ai_strategy_page():
                for i in companies]
     return render_template('ai_strategy.html', graphs=graphs)
 
-@app.route("/logiin")
+@login_manager.unauthorized_handler
+@app.route("/login", methods=["GET", "POST"])
 def login_page():
-    return render_template('login_page.html')
+    if current_user.is_authenticated:
+        return redirect(url_for("cover_page"))
+    form = LogInForm()
+    if request.method == "POST":
+        session = create_session()
+        user = session.query(User).filter(User.name == form.username.data).first()
+        if not user:
+            flash("Неверное имя пользователя или пароль")
+        else:
+            if not user.check_password(form.password.data):
+                flash("Неверное имя пользователя или пароль")
+            else:
+                login_user(user)
+                return redirect(url_for("cover_page"))
+    return render_template('login_page.html', form=form)
+
+@app.route("/singup", methods=["GET", "POST"])
+def singup_page():
+    if current_user.is_authenticated:
+        return redirect(url_for("cover_page"))
+    form = SingUpForm()
+    if request.method == "POST":
+        if not form.validate_on_submit():
+            flash("Форма некорректна")
+        else:
+            print(form.password.data, form.repeat.data)
+            if not (form.password.data == form.repeat.data):
+                flash("Пароли не совпадают")
+            else:
+                session = create_session()
+                user = session.query(User).filter(User.name == form.username.data).first()
+                if user:
+                    flash("Пользователь с таким именем уже существует")
+                else:
+                    user = session.query(User).filter(User.email == form.email.data).first()
+                    if user:
+                        flash("Такая почта уже существует")
+                    else:
+                        user = User(name=form.username.data, email=form.email.data)
+                        user.set_password(form.password.data)
+                        session.add(user)
+                        session.commit()
+                        return redirect(url_for("login_page"))
+    return render_template('singup_page.html', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('cover_page'))
+
 
 @app.route("/ordering")
 def ordering_page():
