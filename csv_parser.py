@@ -24,7 +24,7 @@ def write_data(df: pd.DataFrame, filename):
     df.to_csv(filename, sep=';')
     
 
-if __name__ == '__main__':
+def main():
     write_data(request_stocks(datetime.datetime(2000, 1, 1), "GOOG"), "graphs/GOOG.csv")
     write_data(request_stocks(datetime.datetime(2000, 1, 1), "AAPL"), "graphs/AAPL.csv")
 
@@ -36,3 +36,7 @@ if __name__ == '__main__':
                 write_data(request_stocks(datetime.datetime(2000, 1, 1), row[1]), f"graphs/{row[1]}.csv")
             else:
                 write_data(request_stocks_ru(datetime.date(2022, 1, 1), datetime.date.today(), row[1]), f"graphs/{row[1]}.csv")
+
+
+if __name__ == "__main__":
+    main()
