@@ -17,7 +17,7 @@ from forms.singup_form import SingUpForm
 
 
 global_init(os.path.join("db", "database.db"))
-run_command = ["./TradingBot"] 
+run_command = ["./TradingBot"]
 
 
 login_manager = LoginManager(app)
@@ -91,6 +91,9 @@ def dashboard_page(company_token):
             company["active"] = True
 
     paid_companies = list()
+    free_companies_data = list()
+    paid_companies_data = list()
+    
     with open('all.csv', newline='', encoding="utf-8") as f:
         spamreader = csv.reader(f, delimiter=';')
 
@@ -100,10 +103,27 @@ def dashboard_page(company_token):
     for company in paid_companies:
         if company["token"] == company_token:
             company["active"] = True
+            
+    for company in free_companies:
+        symbol = company["token"]
+        with open(f'graphs/{symbol}.csv', newline='', encoding="utf-8") as f:
+            spamreader = csv.reader(f, delimiter=';')
+            for row in spamreader:
+                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : row[1], "High" : row[2], "Low" : row[3], "Close" : row[4], "Volume" : row[5]})
+        
+    for company in paid_companies:
+        symbol = company["token"]
+        with open(f'graphs/{symbol}.csv', newline='', encoding="utf-8") as f:
+            spamreader = csv.reader(f, delimiter=';')
+            for row in spamreader:
+                paid_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : row[1], "High" : row[2], "Low" : row[3], "Close" : row[4], "Volume" : row[5]})
+        
     data = {
         "free_companies": free_companies,
         "paid_companies": paid_companies,
-        "company_token": company_token
+        "company_token": company_token,
+        "free_companies_data" : free_companies_data,
+        "paid_companies_data" : paid_companies_data,
     }
     return render_template('dashboard_page.html', **data)
 
