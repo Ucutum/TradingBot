@@ -39,19 +39,17 @@ def write_data(df: pd.DataFrame, filename):
     df.to_csv(filename, sep=';', index=False)
     
 
-def main():
-    write_data(request_stocks(datetime.datetime(2000, 1, 1), "GOOG"), "graphs/GOOG.csv")
-    write_data(request_stocks(datetime.datetime(2000, 1, 1), "AAPL"), "graphs/AAPL.csv")
-
+def parse(path):
     with open('all.csv', newline='', encoding="utf-8") as f:
         spamreader = csv.reader(f, delimiter=';')
 
         for row in spamreader:
+            print(f"Downloadding data {row[1]}")
             if row[2] == "NASDAQ": 
-                write_data(request_stocks(datetime.datetime(2000, 1, 1), row[1]), f"graphs/{row[1]}.csv")
+                write_data(request_stocks(datetime.datetime(2000, 1, 1), row[1]), path + f"{row[1]}.csv")
             else:
-                write_data(request_stocks_ru(datetime.date(2023, 1, 1), datetime.date.today(), row[1]), f"graphs/{row[1]}.csv")
+                write_data(request_stocks_ru(datetime.date(2023, 1, 1), datetime.date.today(), row[1]), path + f"{row[1]}.csv")
 
 
 if __name__ == "__main__":
-    main()
+    parse("graphs/")

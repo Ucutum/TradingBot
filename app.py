@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, abort, redirect, request, flash
+from flask import Flask, render_template, url_for, abort, redirect, request, flash, send_file
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 
 app = Flask(__name__)
@@ -85,6 +85,10 @@ def cost_page():
 def cover_page():
     return render_template('cover_page.html')
 
+@app.route("/graphs/<string:filename>")
+def return_csv(filename):
+    return send_file("graphs/" + filename)
+
 @app.route('/dashboard/<company_token>')
 def dashboard_page(company_token):
     free_companies = [
@@ -96,6 +100,9 @@ def dashboard_page(company_token):
             company["active"] = True
 
     paid_companies = list()
+    free_companies_data = list()
+    paid_companies_data = list()
+    
     with open('all.csv', newline='', encoding="utf-8") as f:
         spamreader = csv.reader(f, delimiter=';')
 
@@ -105,10 +112,29 @@ def dashboard_page(company_token):
     for company in paid_companies:
         if company["token"] == company_token:
             company["active"] = True
+            
+    for company in free_companies:
+        symbol = company["token"]
+        with open(f'graphs/{symbol}.csv', newline='', encoding="utf-8") as f:
+            for idx, row in enumerate(reversed(list(csv.reader(f, delimiter=';')))):
+                if idx == 0: continue
+                if idx > 30: break
+                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : round(float(row[1]), 2), "High" : round(float(row[2]), 2), "Low" : round(float(row[3]), 2), "Close" : round(float(row[4]), 2), "Volume" : row[5]})
+        
+    for company in paid_companies:
+        symbol = company["token"]
+        with open(f'graphs/{symbol}.csv', newline='', encoding="utf-8") as f:
+            for idx, row in enumerate(reversed(list(csv.reader(f, delimiter=';')))):
+                if idx == 0: continue
+                if idx > 30: break
+                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : round(float(row[1]), 2), "High" : round(float(row[2]), 2), "Low" : round(float(row[3]), 2), "Close" : round(float(row[4]), 2), "Volume" : row[5]})
+
     data = {
         "free_companies": free_companies,
         "paid_companies": paid_companies,
-        "company_token": company_token
+        "company_token": company_token,
+        "free_companies_data" : free_companies_data,
+        "paid_companies_data" : paid_companies_data,
     }
     return render_template('dashboard_page.html', **data)
 

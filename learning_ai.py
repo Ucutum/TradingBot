@@ -10,13 +10,13 @@ import pandas as pd
 import numpy as np
 import tensorflow as tf
 from keras.layers import Dense
-from keras.models import Sequential
+from keras.models import Sequential, load_model
 from keras.initializers import RandomUniform
 from keras.callbacks import History
 import matplotlib.pyplot as plt
 import pandas as pd
 import math
-from csv_parser import write_data, request_stocks
+from csv_parser import parse
 import csv
 import datetime
 
@@ -143,45 +143,80 @@ def make_selections(x, y, pl, mxx):
   return xl, xt, yl, yt, mxxl, mxxt
 
 
-def learn(token, foldername):
+def check(model, data, path, pathtxt, token):
+  print("Testing model")
+  pr = 1 - 0.15
+
+  history = []
+  c = 100
+  test_range = range(100, len(data) - 1)
+  for i in test_range:
+    print(i)
+    x = np.array(data[i - 100:i])
+    xg, mxx = grounding_one(np.array([x]))
+    p = ungrounding_one(model.predict(xg), mxx)[0]
+    y = np.array([data[i]])
+    # print(f"x {x[-1]} p {p[0]} y {y[0]}")
+    up = c / x[-1] * p[0]
+    rup = c / x[-1] * y[0]
+    down = c * x[0] / p[-1]
+    rdown = c * x[0] / y[-1]
+    if up > down:
+      c = rup
+    else:
+      c = rdown
+    history.append(c)
+
+
+  print("Прибыль при тестировании: ", history[-1])
+  with open(pathtxt, "w") as f:
+    f.write(f"{history[-1]}" + "\n")
+  # print(len(test_range))
+  plt.plot(history)
+  plt.title('График прибыли')
+  plt.xlabel('Время')
+  plt.ylabel('Прибыль')
+  plt.savefig(path)
+  print("End testing")
+
+
+def learn(token, foldername, fromfoldername):
   print(f"Обработка {token}")
-  data = read_data(foldername + token + ".csv", delimiter=';')
+  data = read_data(fromfoldername + token + ".csv", delimiter=';')
   print(data.head(3))
-  data = data[["Open", "Close"]].mean(axis=1)
+  data = data[["Close"]]
   data = np.array(data)
-  data = data[:]
-  x, y, mxx = generate(data, 100, 5)
-  xl, xt, yl, yt, mxxl, mxxt = make_selections(x, y, 90, mxx)
-  print(len(mxxl))
-  xlf = xl
-  xtf = xt
+  data = data.T[0]
+  print(len(data))
+  test_data = data[-230:]
+  data = data[:-230]
+  xt, yt, mxxt = generate(test_data, 100, 1)
+  xl, yl, mxxl = generate(data, 100, 1)
+  print(len(mxxl), len(mxxt))
   model = tf.keras.models.Sequential()
   model.add(tf.keras.layers.Dense(100, activation=tf.nn.relu))
   model.add(tf.keras.layers.Dense(100, activation=tf.nn.relu))
-  model.add(tf.keras.layers.Dense(5, activation=tf.nn.relu))
+  model.add(tf.keras.layers.Dense(1, activation=tf.nn.relu))
   model.compile(
       optimizer='adam', loss='mse', metrics='mse')
   history = History()
-  model.fit(xlf, yl, epochs=300, callbacks=[history])
+  model.fit(xl, yl, epochs=2, callbacks=[history])
+
+  model_name = foldername + token + "_model.h5"
+  model.save(model_name)
   plt.plot(history.history['loss'])
   plt.title('График сходимости')
   plt.xlabel('Эпоха')
   plt.ylabel('Функция потерь')
   plt.savefig(foldername + token + '_convergence.png')
+  plt.close()
 
   i_stat = range(len(xt))
-  loss_stat = (ungrounding_one(yt, mxxt) - ungrounding_one(model.predict(xtf), mxxt))[:, 0]
+  loss_stat = (ungrounding_one(yt, mxxt) - ungrounding_one(model.predict(xt), mxxt))[:, 0]
   y_stat = sum(ungrounding_one(yt, mxxt)[:, 0])
-  p_stat = sum(ungrounding_one(model.predict(xtf), mxxt)[:, 0])
-  enddf = pd.DataFrame({
-      "i": i_stat,
-      "loss": loss_stat,
-      "y": y_stat,
-      "p": p_stat
-  })
-  stat = (sum(enddf["loss"].abs()) / len(enddf["y"]))
+  p_stat = sum(ungrounding_one(model.predict(xt), mxxt)[:, 0])
   y_diff = np.array([np.sum(np.abs(np.diff(arr))) for arr in ungrounding_one(yt, mxxt)])
-  loss_for_graph = np.array([np.sum(np.abs(arr)) for arr in ungrounding_one(yt, mxxt) - ungrounding_one(model.predict(xtf), mxxt)])
+  loss_for_graph = np.array([np.sum(np.abs(arr)) for arr in ungrounding_one(yt, mxxt) - ungrounding_one(model.predict(xt), mxxt)])
   y_diff_cnt, _ = np.histogram(y_diff, bins=np.arange(0, len(loss_for_graph) + 1))
   combined = zip(y_diff, loss_for_graph, y_diff_cnt)
   sorted_combined = sorted(combined, key=lambda x: x[0])
@@ -191,20 +226,29 @@ def learn(token, foldername):
   plt.ylabel('loss')
   plt.title('Scatter Plot of y vs p with Color-encoded Loss')
   plt.savefig(foldername + token + '_loss.png')
+  plt.close()
 
-  model_name = foldername + token + "_model.h5"
-  model.save(model_name)
+  check(model, test_data, foldername + token + '_check.png',
+          foldername + token + 'result.txt', token)
 
 
 def main():
   with open("all.csv") as f:
     companies = [e[1] for e in csv.reader(f, delimiter=";")]
-  companies = companies
+  companies = companies[:2]
   for c in companies:
-    print(f"Downloadding data {c}")
-    write_data(request_stocks(datetime.datetime(2000, 1, 1), c), "models/" + c + ".csv")
     print(f"Learning {c}")
-    learn(c, "models/")
+    learn(c, "models/", "graphs/")
+
+
+def main_check():
+  model = load_model("models/NVDA_model.h5")
+  data = read_data("graphs/NVDA.csv", delimiter=';')
+  # data = data[["Open", "Close"]].mean(axis=1)
+  data = data[["Close"]]
+  data = np.array(data)
+  test_data = data[-130:]
+  check(model, test_data, "models/NVDA_check.png")
 
 
 if __name__ == '__main__':
