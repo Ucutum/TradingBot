@@ -155,12 +155,11 @@
 <!-- TradingView Widget END -->
 
 
-      <h2>Таблица цен</h2>
+      <h2>Данные о торгах</h2>
       <div class="table-responsive">
         <table class="table table-striped table-sm">
           <thead>
             <tr>
-              <th>#</th>
               <th>Date</th>
               <th>Open</th>
               <th>High</th>
@@ -171,6 +170,19 @@
           </thead>
           <tbody>
             {% for company in paid_companies_data %}
+            {% if company.Symbol == company_token %}
+              <tr>
+                <td>{{company.Date}}</td>
+                <td>{{company.Open}}</td>
+                <td>{{company.High}}</td>
+                <td>{{company.Low}}</td>
+                <td>{{company.Close}}</td>
+                <td>{{company.Volume}}</td>
+              </tr>
+            {% endif %}
+            {% endfor %}
+
+            {% for company in free_companies_data %}
             {% if company.Symbol == company_token %}
               <tr>
                 <td>{{company.Date}}</td>

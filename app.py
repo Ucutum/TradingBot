@@ -117,17 +117,19 @@ def dashboard_page(company_token):
     for company in free_companies:
         symbol = company["token"]
         with open(f'graphs/{symbol}.csv', newline='', encoding="utf-8") as f:
-            spamreader = csv.reader(f, delimiter=';')
-            for row in spamreader:
-                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : row[1], "High" : row[2], "Low" : row[3], "Close" : row[4], "Volume" : row[5]})
+            for idx, row in enumerate(reversed(list(csv.reader(f, delimiter=';')))):
+                if idx == 0: continue
+                if idx > 30: break
+                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : round(float(row[1]), 2), "High" : round(float(row[2]), 2), "Low" : round(float(row[3]), 2), "Close" : round(float(row[4]), 2), "Volume" : row[5]})
         
     for company in paid_companies:
         symbol = company["token"]
         with open(f'graphs/{symbol}.csv', newline='', encoding="utf-8") as f:
-            spamreader = csv.reader(f, delimiter=';')
-            for row in spamreader:
-                paid_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : row[1], "High" : row[2], "Low" : row[3], "Close" : row[4], "Volume" : row[5]})
-        
+            for idx, row in enumerate(reversed(list(csv.reader(f, delimiter=';')))):
+                if idx == 0: continue
+                if idx > 30: break
+                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : round(float(row[1]), 2), "High" : round(float(row[2]), 2), "Low" : round(float(row[3]), 2), "Close" : round(float(row[4]), 2), "Volume" : row[5]})
+
     data = {
         "free_companies": free_companies,
         "paid_companies": paid_companies,
