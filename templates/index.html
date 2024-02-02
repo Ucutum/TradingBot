@@ -53,19 +53,18 @@
 <body>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="https://bootstrap5.ru/examples/starter-template#">Navbar</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto mb-2 mb-md-0">
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav mr-auto mb-2 mb-md-0" class="nav">
         <li class="nav-item active">
           <a class="nav-link" aria-current="page" href="{{ url_for('index_page') }}">Главная</a>
         </li>
         {% if not current_user.subscription %}
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('cost_page') }}">Cost</a>
+          <a class="nav-link" href="{{ url_for('cost_page') }}">Подписки</a>
         </li>
         {% endif %}
         <li class="nav-item">
@@ -97,13 +96,13 @@
     </div>
     {% if current_user.is_authenticated %}
       {% if current_user.subscription %}
-      <h5>Подписка активна</h5>
+      <h5 >Подписка активна</h5>
       {% else %}
-      <h5>Подписка не активна</h5>
+      <h5 style="color:white">Подписка не активна</h5>
       {% endif %}
-    <h5>{{ current_user.name }}</h5>
+    <h5 style="color:white">{{ current_user.name }}</h5>
     {% else %}
-    <h5>Гость</h5>
+    <h5 style="color:white">Гость</h5>
     {% endif %}
   </div>
 </nav>

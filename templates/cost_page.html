@@ -56,13 +56,14 @@
         font-size:90px; 
         text-shadow: 2px 2px 2px #bfec09;
       }
-      h1, h4 {
+      h1{
         color:white; 
-        text-shadow: 2px 2px 2px #55670d;
+      }
+      h4 {
+        color:white; 
       }
       .card-body li{  
         color:white; 
-        text-shadow: 2px 2px 2px #55670d;
       }
     </style><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9">
 {% endblock head %}
@@ -93,7 +94,7 @@
             <li>Поддержка по email</li> 
             <li>Недоступна нейросеть</li>
           </ul>
-          <form action="{{ url_for('dashboard_page', company_token='first') }}">
+          <form action="{{ url_for('dashboard_page', company_token='GOOG') }}">
             <button type="submit" class="btn btn-lg btn-block btn-outline-primary">Подпишитесь бесплатно</button>
           </form>
         </div>    
@@ -108,12 +109,12 @@
           <h1 class="card-title pricing-card-title">$15 <small>/ мес.</small></h1>
           <ul class="list-unstyled mt-3 mb-4">
             <li>Все, что доступно в бесплатной версии</li>
-            <li>Доступны 10/20 компаний</li>
+            <li>Доступны 20/20 компаний</li>
             <li>Приоритетная поддержка по email</li>
             <li>Доступ к нейросети</li>
           </ul>
           <form method="post">
-            <button type="submit" class="btn btn-lg btn-block btn-primary">Начать</button>
+            <button type="submit" class="btn btn-lg btn-block btn-primary">Купить подписку</button>
           </form>
         </div>
       </div>
