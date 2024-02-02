@@ -22,7 +22,7 @@ with open('settings.json', 'r') as f:
 
 
 global_init(os.path.join("db", "database.db"))
-run_command = ["./TradingBot"] 
+run_command = ["./TradingBot.exe"] 
 
 
 login_manager = LoginManager(app)
@@ -138,7 +138,7 @@ def dashboard_page(company_token):
     }
     return render_template('dashboard_page.html', **data)
 
-@app.route("/futer")
+@app.route("/")
 def futer_page():
     my_path = os.path.abspath(os.path.dirname(__file__))
     path = os.path.join(my_path, "gdata", "package_NASDAQ.txt")
