@@ -107,7 +107,7 @@ def dashboard_page(company_token):
     }
     return render_template('dashboard_page.html', **data)
 
-@app.route("/futer")
+@app.route("/strategy")
 def futer_page():
     my_path = os.path.abspath(os.path.dirname(__file__))
     path = os.path.join(my_path, "gdata", "package_NASDAQ.txt")
