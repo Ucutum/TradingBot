@@ -17,7 +17,7 @@ from forms.singup_form import SingUpForm
 
 
 global_init(os.path.join("db", "database.db"))
-run_command = ["./TradingBot"] 
+run_command = ["./TradingBot.exe"] 
 
 
 login_manager = LoginManager(app)
