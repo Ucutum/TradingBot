@@ -14,10 +14,20 @@ import subprocess
 
 from forms.login_form import LogInForm
 from forms.singup_form import SingUpForm
+import json
+
+
+with open('settings.json', 'r') as f:
+    settings = json.load(f)
 
 
 global_init(os.path.join("db", "database.db"))
-run_command = ["./TradingBot"] 
+if settings["system"] == "Windows":
+    run_command = ["./TradingBot.exe"]
+elif settings["system"] == "Linux":
+    run_command = ["./TradingBot"]
+else:
+    run_command = ["./TradingBot"] 
 
 
 login_manager = LoginManager(app)
