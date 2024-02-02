@@ -143,7 +143,7 @@ def make_selections(x, y, pl, mxx):
   return xl, xt, yl, yt, mxxl, mxxt
 
 
-def check(model, data, path):
+def check(model, data, path, pathtxt, token):
   print("Testing model")
   pr = 1 - 0.15
 
@@ -169,6 +169,8 @@ def check(model, data, path):
 
 
   print("Прибыль при тестировании: ", history[-1])
+  with open(pathtxt, "w") as f:
+    f.write(f"{history[-1]}" + "\n")
   # print(len(test_range))
   plt.plot(history)
   plt.title('График прибыли')
@@ -198,7 +200,7 @@ def learn(token, foldername, fromfoldername):
   model.compile(
       optimizer='adam', loss='mse', metrics='mse')
   history = History()
-  model.fit(xl, yl, epochs=300, callbacks=[history])
+  model.fit(xl, yl, epochs=2, callbacks=[history])
 
   model_name = foldername + token + "_model.h5"
   model.save(model_name)
@@ -207,6 +209,7 @@ def learn(token, foldername, fromfoldername):
   plt.xlabel('Эпоха')
   plt.ylabel('Функция потерь')
   plt.savefig(foldername + token + '_convergence.png')
+  plt.close()
 
   i_stat = range(len(xt))
   loss_stat = (ungrounding_one(yt, mxxt) - ungrounding_one(model.predict(xt), mxxt))[:, 0]
@@ -223,14 +226,16 @@ def learn(token, foldername, fromfoldername):
   plt.ylabel('loss')
   plt.title('Scatter Plot of y vs p with Color-encoded Loss')
   plt.savefig(foldername + token + '_loss.png')
+  plt.close()
 
-  check(model, test_data, foldername + token + '_check.png')
+  check(model, test_data, foldername + token + '_check.png',
+          foldername + token + 'result.txt', token)
 
 
 def main():
   with open("all.csv") as f:
     companies = [e[1] for e in csv.reader(f, delimiter=";")]
-  companies = [companies[0]]
+  companies = companies[:2]
   for c in companies:
     print(f"Learning {c}")
     learn(c, "models/", "graphs/")
