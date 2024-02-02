@@ -1,6 +1,7 @@
-NVIDIA Corporation;NVDA
-Amazon;AMZN
-PayPal;PYPL
-UBER;UBER
-AMD;AMD
-Intel Corporation;INTC
+NVIDIA Corporation;NVDA;NASDAQ
+Amazon;AMZN;NASDAQ
+PayPal;PYPL;NASDAQ
+UBER;UBER;NASDAQ
+AMD;AMD;NASDAQ
+Intel Corporation;INTC;NASDAQ
+Yandex;YNDX;MOEX
