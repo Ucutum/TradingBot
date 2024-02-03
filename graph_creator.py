@@ -11,6 +11,7 @@ from learning_ai import read_data
 from csv_parser import write_data, request_stocks
 import csv
 import datetime
+import os
     
 
 def craete_graph(data, company_token):
@@ -48,11 +49,14 @@ def main():
     # companies = ["QIWI"]
 
     for company in companies:
+        if not os.path.exists(f"models/{company}_model.h5"):
+            continue
         write_data(request_stocks(datetime.datetime(2000, 1, 1), company), "models/" + company + ".csv")
-        remove_trailing_empty_lines(f"models/{company}.csv")
-        data = read_data(f"models/{company}.csv", delimiter=';')
+        remove_trailing_empty_lines(f"graphs/{company}.csv")
+        data = read_data(f"graphs/{company}.csv", delimiter=';')
         # data = read_data("models/YNDX_000101_240101.csv", delimiter=';')
         x = np.array([np.array(data[["Open", "Close"]].mean(axis=1))[-100:]])
+        print(x)
         x, mxx = grounding_one(x)
         model = load_model(f"models/{company}_model.h5")
         p = model.predict(x)
@@ -61,7 +65,7 @@ def main():
         print(data[-100:].tail(6))
 
         last = data['Close'][len(data) - 1]
-        for i in range(5):
+        for i in range(1):
             last_date = data["Date"].iloc[-1]
             next_day = last_date + timedelta(days=1)
             # Date;Open;High;Low;Close;Adj Close;Volume
