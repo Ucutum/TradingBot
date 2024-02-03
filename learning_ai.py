@@ -200,7 +200,7 @@ def learn(token, foldername, fromfoldername):
   model.compile(
       optimizer='adam', loss='mse', metrics='mse')
   history = History()
-  model.fit(xl, yl, epochs=2, callbacks=[history])
+  model.fit(xl, yl, epochs=200, callbacks=[history])
 
   model_name = foldername + token + "_model.h5"
   model.save(model_name)
@@ -235,7 +235,7 @@ def learn(token, foldername, fromfoldername):
 def main():
   with open("all.csv") as f:
     companies = [e[1] for e in csv.reader(f, delimiter=";")]
-  companies = companies[:2]
+  companies = [companies[-1]]
   for c in companies:
     print(f"Learning {c}")
     learn(c, "models/", "graphs/")
