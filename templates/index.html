@@ -76,6 +76,11 @@
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('ai_strategy_page') }}">Cтратегия от AI</a>
         </li>
+        {% if current_user.subscription %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('cover2_page') }}">Ваша подписка</a>
+        </li>
+        {% endif %}
         {% if current_user.is_authenticated %}
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('logout') }}">Разлогиниться</a>
