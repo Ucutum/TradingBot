@@ -166,9 +166,8 @@ def dashboard_page(company_token):
 
     return render_template('dashboard_page.html', **data)
 
-@app.route("/stat")
+@app.route("/strategy")
 def futer_page():
-    subprocess.run(run_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     shares = list()
     data = dict()
@@ -253,11 +252,15 @@ def singup_page():
                         return redirect(url_for("login_page"))
     return render_template('singup_page.html', form=form)
 
+@app.route('/tologout')
+def tologout():
+    return render_template('cover3_page.html')
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('cover_page'))
+    return redirect(url_for('login_page'))
 
 @app.route('/cancel_subscription')
 def cancel_subscription_page():

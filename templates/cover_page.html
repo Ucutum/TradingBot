@@ -125,9 +125,9 @@
   <h1>Вы удачно вошли в аккаунт!</h1>
   <p>Ваш логин: {{ current_user.name }}</p>
   <p>Ваша почта: {{current_user.email}}</p>
-  <p>  
-    <a href="/" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">Выйти из аккаунта</a>
-  </p>
+  <form action="/logout"> 
+    <button class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">Выйти из аккаунта</button>
+  </form>
 
   <footer class="mt-auto text-white-50">
   </footer>

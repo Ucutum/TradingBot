@@ -68,10 +68,10 @@
         </li>
         {% endif %}
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('dashboard_page', company_token='GOOG') }}">Dashboard</a>
+          <a class="nav-link" href="{{ url_for('dashboard_page', company_token='NVDA') }}">Dashboard</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('futer_page') }}">Стратегия</a>
+          <a class="nav-link" href="{{ url_for('futer_page')}}">Стратегия</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('ai_strategy_page') }}">Cтратегия от AI</a>
@@ -83,7 +83,7 @@
         {% endif %}
         {% if current_user.is_authenticated %}
         <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('logout') }}">Разлогиниться</a>
+          <a class="nav-link" href="{{ url_for('tologout') }}">Личный кабинет</a>
         </li>
         {% else %}
         <li class="nav-item">
