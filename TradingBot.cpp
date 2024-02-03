@@ -163,6 +163,7 @@ struct tradeBot {
     void buy(ll id, dl cost, dl fall_sz) {
         cost *= (1 - (dl)commission);
         if (cost < 1e-15) return;
+        if (fall_sz > 1.1) return;
         dl cnt = cost / companies[id][companies[id].size() - 1 - curtime].close;
         cnt = (ll)cnt;
         if ((ll)cnt == 0) return;
@@ -300,6 +301,9 @@ void simulate(ll day0) {
     ll day = 1;
     for (ll i = 0; tb.curtime >= 0; i++) {
         cout << "day " << day << " : " << tb.summary << endl;
+        if (day == 125) {
+            ll h = 0;
+        }
         fff << (ll)(((tb.summary / 100000) - 1) * 10000) << endl;
         tb.make();
         tb.curtime--;
@@ -351,7 +355,7 @@ int main() {
         string s2 = "";
         bool ww = false;
         for (auto sym : s) {
-            if (ww && sym >= 'A' && sym <= 'Z') s2.push_back(sym);
+            if (ww && ((sym >= 'A' && sym <= 'Z') || sym == '-')) s2.push_back(sym);
             if (sym == ';' && ww) break;
             if (sym == ';') ww = true;
         }
@@ -359,7 +363,7 @@ int main() {
         company_names.push_back(s2);
     }
 
-    //simulate(1000);
+    //simulate(250);
     if (check_rebuild()) rebuild(1000000);   //раскоментировать - prepareFiles
     help();             //раскоментировать - redistribute
 }
