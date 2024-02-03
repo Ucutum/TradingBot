@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, abort, redirect, request, flash
+from flask import Flask, render_template, url_for, abort, redirect, request, flash, send_file
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 
 app = Flask(__name__)
@@ -22,12 +22,7 @@ with open('settings.json', 'r') as f:
 
 
 global_init(os.path.join("db", "database.db"))
-if settings["system"] == "Windows":
-    run_command = ["./TradingBot.exe"]
-elif settings["system"] == "Linux":
-    run_command = ["./TradingBot"]
-else:
-    run_command = ["./TradingBot"] 
+run_command = ["./TradingBot"] 
 
 
 login_manager = LoginManager(app)
@@ -89,6 +84,10 @@ def cost_page():
 @app.route('/cover')
 def cover_page():
     return render_template('cover_page.html')
+
+@app.route("/graphs/<string:filename>")
+def return_csv(filename):
+    return send_file("graphs/" + filename)
 
 @app.route('/dashboard/<company_token>')
 def dashboard_page(company_token):

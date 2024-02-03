@@ -317,7 +317,7 @@ int main() {
         company_names.push_back(s2);
     }
 
-    //simulate(20);
+    // simulate(20);
     rebuild(1000000);   //раскоментировать - prepareFiles
     help();             //раскоментировать - redistribute
 }
