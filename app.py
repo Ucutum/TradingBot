@@ -119,7 +119,7 @@ def dashboard_page(company_token):
             for idx, row in enumerate(reversed(list(csv.reader(f, delimiter=';')))):
                 if idx == 0: continue
                 if idx > 30: break
-                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : round(float(row[1]), 2), "High" : round(float(row[2]), 2), "Low" : round(float(row[3]), 2), "Close" : round(float(row[4]), 2), "Volume" : row[5]})
+                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : round(float(row[1]), 2), "High" : round(float(row[2]), 2), "Low" : round(float(row[3]), 2), "Close" : round(float(row[4]), 2), "Volume" : int(float(row[5]))})
         
     for company in paid_companies:
         symbol = company["token"]
@@ -127,7 +127,7 @@ def dashboard_page(company_token):
             for idx, row in enumerate(reversed(list(csv.reader(f, delimiter=';')))):
                 if idx == 0: continue
                 if idx > 30: break
-                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : round(float(row[1]), 2), "High" : round(float(row[2]), 2), "Low" : round(float(row[3]), 2), "Close" : round(float(row[4]), 2), "Volume" : row[5]})
+                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : round(float(row[1]), 2), "High" : round(float(row[2]), 2), "Low" : round(float(row[3]), 2), "Close" : round(float(row[4]), 2), "Volume" : int(float(row[5]))})
 
     data = {
         "free_companies": free_companies,
