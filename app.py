@@ -160,7 +160,7 @@ def futer_page():
 
 @app.route("/ai_strategy")
 def ai_strategy_page():
-    with open("all.csv") as f:
+    with open("all.csv", encoding='utf-8') as f:
         companies = [i for i in csv.reader(f, delimiter=";")]
     graphs = [
         {"name": i[0],
