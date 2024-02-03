@@ -111,9 +111,9 @@ struct tradeBot {
 
     void save_package() {
         ofstream pack_fout = ofstream("gdata/Package_" + exchange + ".txt");
-        pack_fout << "MONEY " << balance << endl;
+        pack_fout << "MONEY " << balance << " " << 1 << endl;
         for (ll i = 0; i < company_count; i++) {
-            pack_fout << company_names[i] << " " << share_count[i] << endl;
+            pack_fout << company_names[i] << " " << share_count[i] << " " << companies[i].back().close << endl;
         }
     }
 
@@ -135,10 +135,8 @@ struct tradeBot {
         string token = company_names[id];
         ofstream of1 = open_file("gdata/" + token + "_graph_data.csv");
         ofstream of2 = open_file("gdata/" + token + "_graph_colors.txt");
-        of1 << companies[id].back().date << ";" 
-            << companies[id].back().close << ";" 
-            << companies[id].back().date << ";" 
-            << companies[id].back().close + 0.2 << endl;
+        of1 << companies[id].back().date << ";"
+            << companies[id].back().close << endl;
         of2 << c << endl;
     }
 
@@ -363,7 +361,8 @@ int main() {
         company_names.push_back(s2);
     }
 
+    if (check_rebuild()) rebuild(1000000);
+
     //simulate(250);
-    if (check_rebuild()) rebuild(1000000);   //раскоментировать - prepareFiles
     help();             //раскоментировать - redistribute
 }

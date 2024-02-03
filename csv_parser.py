@@ -31,8 +31,8 @@ def write_data(df: pd.DataFrame, filename):
     
 
 def parse(path):
-    write_data(request_stocks(datetime.datetime(2000, 1, 1), "GOOG"), path + "GOOG.csv")
-    write_data(request_stocks(datetime.datetime(2000, 1, 1), "AAPL"), path + "AAPL.csv")
+    # write_data(request_stocks(datetime.datetime(2000, 1, 1), "GOOG"), path + "GOOG.csv")
+    # write_data(request_stocks(datetime.datetime(2000, 1, 1), "AAPL"), path + "AAPL.csv")
 
     with open('all.csv', newline='', encoding="utf-8") as f:
        spamreader = csv.reader(f, delimiter=';')
