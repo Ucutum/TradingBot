@@ -64,7 +64,7 @@ def subscription_purchased_page():
     return render_template('subscription_purchased_page.html')
 
 
-@app.route('/cost', methods=['GET', 'POST'])
+@app.route('/subscriptions', methods=['GET', 'POST'])
 def cost_page():
     if current_user.is_authenticated:
         if current_user.subscription:
@@ -81,7 +81,7 @@ def cost_page():
             return redirect(url_for('subscription_purchased_page'))
     return render_template('cost_page.html')
 
-@app.route('/cover')
+@app.route('/personal_area')
 def cover_page():
     return render_template('cover_page.html')
 
