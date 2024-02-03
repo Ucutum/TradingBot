@@ -130,7 +130,7 @@
       </div>
 
       <h2>График цен</h2>
-      <div id="widget" data-token="{{ company_token|tojson}}"></div>
+      <div id="widget" data-token={{ company_token|tojson }}></div>
       <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
       <script type="text/javascript" src="{{url_for('static', filename='./js/widget.js')}}"></script>
 
