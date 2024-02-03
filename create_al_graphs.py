@@ -1,21 +1,43 @@
 import mplfinance as mpf
 import pandas as pd
 import csv
+from graph_creator import remove_trailing_empty_lines
 
 
-def create_graph(token, path):
-    df = pd.read_csv(path,index_col=0,parse_dates=True)
+def create_graph(token):
+    remove_trailing_empty_lines(f"graphs/{token}.csv")
+    print(f"Creage graph, {token}")
+    # df = pd.read_csv(f"graphs/{token}.csv")
+    df = pd.read_csv(f"graphs/{token}.csv", delimiter=";")
+    df['Date'] = pd.to_datetime(df['Date'], format='%Y-%m-%d')
+    df.rename(columns={'Date': 'date', 'Open': 'open', 'High': 'high', 'Low': 'low', 'Close': 'close', 'Volume': 'volume'}, inplace=True)
+    df.set_index('date', inplace=True)
 
-    with open(f"{token}_graph_data.csv") as f:
+    with open(f"gdata/{token}_graph_data.csv") as f:
         reader = csv.reader(f, delimiter=';')
         seq_of_points_ = list(reader)
         seq_of_points = []
         for line in seq_of_points_:
             seq_of_points.append([(line[0], float(line[1])), (line[2], float(line[3]))])
 
-    with open(f"{token}_graph_colors.csv") as f:
-        colors = [i for i in f.readlines()]
+    with open(f"gdata/{token}_graph_colors.txt") as f:
+        colors = [i.strip() for i in f.readlines()]
 
-    mpf.plot(df,alines=dict(alines=seq_of_points, colors=['b','r','g'], linewidths=5))
-    mpf.savefig(f"static/graph/{token}_alggraph.png")
-    mpf.close()
+    print(colors)
+
+    mpf.plot(df,alines=dict(alines=seq_of_points, colors=colors, linewidths=100), savefig=f"static/graph/{token}_alggraph.png")
+
+
+def create_all():
+    with open("all.csv") as f:
+        companies = [e[1] for e in csv.reader(f, delimiter=";")]
+    for company in companies:
+        create_graph(company)
+
+
+def main():
+    create_all()
+
+
+if __name__ == '__main__':
+    main()
