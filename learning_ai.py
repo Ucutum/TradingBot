@@ -177,6 +177,7 @@ def check(model, data, path, pathtxt, token):
   plt.xlabel('Время')
   plt.ylabel('Прибыль')
   plt.savefig(path)
+  plt.close()
   print("End testing")
 
 
