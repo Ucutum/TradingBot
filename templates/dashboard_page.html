@@ -115,6 +115,7 @@
         </div>
       </nav>
     <main class="col-md-9 ml-sm-auto col-lg-10 px-md-4"><div class="chartjs-size-monitor"><div class="chartjs-size-monitor-expand"><div class=""></div></div><div class="chartjs-size-monitor-shrink"><div class=""></div></div></div>
+      {% if canwatch %}
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">Dashboard</h1>
         <div class="btn-toolbar mb-2 mb-md-0">
@@ -176,6 +177,10 @@
           </tbody>
         </table>
       </div>
+      {% else %}
+      <h1>Для просмотра этой страницы оплатите подписку</h1>
+      <h1 style="color: white;">Для просмотра этой страницы оплатите подписку</h1>
+      {% endif %}
     </main>
   </div>
 </div><script type="text/javascript" async="" src="{{url_for('static', filename='./js/analytics.js')}}"></script><script type="text/javascript" async="" src=""></script><script async="" src="{{url_for('static', filename='./js/tag.js')}}"></script><script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>

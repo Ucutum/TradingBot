@@ -16,6 +16,9 @@ from forms.login_form import LogInForm
 from forms.singup_form import SingUpForm
 import json
 
+from graph_creator import remove_trailing_empty_lines
+
+
 
 with open('settings.json', 'r') as f:
     settings = json.load(f)
@@ -96,10 +99,17 @@ def return_csv(filename):
 
 @app.route('/dashboard/<company_token>')
 def dashboard_page(company_token):
-    free_companies = [
-        {"title": "Google", "active": False, "token": "GOOG"},
-        {"title": "Apple", "active": False, "token": "AAPL"}
-    ]
+    if company_token == "first":
+        company_token = "NVDA"
+
+    free_companies = []
+    with open('all.csv', newline='', encoding="utf-8") as f:
+        spamreader = list(csv.reader(f, delimiter=';'))
+
+        for row in list(spamreader)[:len(list(spamreader)) // 2]:
+            free_companies.append({"title" : row[0], "active" : False, "token" : row[1]})
+
+
     for company in free_companies:
         if company["token"] == company_token:
             company["active"] = True
@@ -109,9 +119,9 @@ def dashboard_page(company_token):
     paid_companies_data = list()
     
     with open('all.csv', newline='', encoding="utf-8") as f:
-        spamreader = csv.reader(f, delimiter=';')
+        spamreader = list(csv.reader(f, delimiter=';'))
 
-        for row in spamreader:
+        for row in list(spamreader)[len(list(spamreader))//2:]:
             paid_companies.append({"title" : row[0], "active" : False, "token" : row[1]})
 
     for company in paid_companies:
@@ -134,28 +144,41 @@ def dashboard_page(company_token):
                 if idx > 30: break
                 free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : round(float(row[1]), 2), "High" : round(float(row[2]), 2), "Low" : round(float(row[3]), 2), "Close" : round(float(row[4]), 2), "Volume" : int(float(row[5]))})
 
+    canwatch = False
+    if company_token in [i["token"] for i in free_companies]:
+        canwatch = True
+    elif company_token in [i["token"] for i in paid_companies]:
+        if current_user.is_authenticated:
+            if current_user.subscription:
+                canwatch = True
+    print(canwatch, company_token)
+
+
     data = {
         "free_companies": free_companies,
         "paid_companies": paid_companies,
         "company_token": company_token,
         "free_companies_data" : free_companies_data,
         "paid_companies_data" : paid_companies_data,
+        "canwatch" : canwatch
     }
+    # print(data["free_companies"])
+
     return render_template('dashboard_page.html', **data)
 
 @app.route("/stat")
 def futer_page():
-    my_path = os.path.abspath(os.path.dirname(__file__))
-    path = os.path.join(my_path, "gdata", "package_NASDAQ.txt")
     subprocess.run(run_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     shares = list()
     data = dict()
 
-    with open(path, "r", newline="") as f:
+    remove_trailing_empty_lines("gdata/Package_.txt")
+
+    with open("gdata/Package_.txt", "r", newline="") as f:
         lines = f.readlines()
         for item in lines:
-            title, cost = item.split()
+            title, cost, _ = item.split()
             if title == "MONEY": data[title] = cost
             else: shares.append({"title" : title, "cost" : cost})
 
@@ -163,13 +186,22 @@ def futer_page():
 
     return render_template('futer_page.html', **data)
 
+def get_graphs_paths():
+    '''дает ссылки на графики прогы Артема'''
+    with open("all.csv") as f:
+        companies = [e for e in csv.reader(f, delimiter=";")]
+    return list(filter(lambda x: x is not None, [(
+            (i[0], f"graph/{i[1]}_graph.png") if
+         os.path.exists(f"static/graph/{i[1]}_graph.png"
+                        ) else None) for i in companies]))
+
 @app.route("/ai_strategy")
 def ai_strategy_page():
-    with open("all.csv", encoding='utf-8') as f:
-        companies = [i for i in csv.reader(f, delimiter=";")]
+    companies = get_graphs_paths()
+    print(companies)
     graphs = [
         {"name": i[0],
-         "img":f"graph/{i[1]}_graph.png"}
+         "img":f"{i[1]}"}
                for i in companies]
     return render_template('ai_strategy.html', graphs=graphs)
 
