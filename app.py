@@ -176,10 +176,14 @@ def futer_page():
 
     with open("gdata/Package_.txt", "r", newline="") as f:
         lines = f.readlines()
+        full_money = 0.0
         for item in lines:
-            title, cost, _ = item.split()
+            y, c, cn = item.split()     
+            if(y != "MONEY"): full_money += float(c) * float(cn)
+        for item in lines:
+            title, cost, cost_one = item.split()
             if title == "MONEY": data[title] = cost
-            else: shares.append({"title" : title, "cost" : cost})
+            else: shares.append({"title" : title, "cost" : round(float(cost) * float(cost_one) / full_money * 100, 2), "spend" : round(float(cost) * float(cost_one), 2)})
 
     data['current_shares'] = shares
 
