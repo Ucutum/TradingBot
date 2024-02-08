@@ -139,7 +139,7 @@ def ai_strategy_page():
 
 @app.route("/futer")
 def futer_page():
-    return render_template('futer.html')
+    return render_template('futer_page.html')
 
 @login_manager.unauthorized_handler
 @app.route("/login", methods=["GET", "POST"])
