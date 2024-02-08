@@ -21,7 +21,7 @@ def create_graph(token):
             seq_of_points = []
             r = max(df[['close']].values)[0] - min(df[['close']].values)[0]
             print("RRR", r)
-            r /= 100
+            r /= 50
             print(r)
             for line in seq_of_points_:
                 print(line)
@@ -31,7 +31,7 @@ def create_graph(token):
             colors = [i.strip() for i in f.readlines()]
 
         print(colors)
-        r = len(df[['close']].values) / 100
+        r = len(df[['close']].values) / 1000
         mpf.plot(df,alines=dict(alines=seq_of_points, colors=colors, linewidths=r), savefig=f"static/graph/{token}_alggraph.png")
 
 

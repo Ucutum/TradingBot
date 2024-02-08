@@ -129,14 +129,20 @@ struct tradeBot {
         fin >> exchange;
 
         ad_fout = ofstream("gdata/Advice_" + exchange + ".txt");
+
+        for (ll i = 0; i < company_count; i++) {
+            ofstream of = ofstream("gdata/" + company_names[i] + "_graph_data.csv");
+        }
     }
 
     void add_operation(ll id, char c) {
         string token = company_names[id];
         ofstream of1 = open_file("gdata/" + token + "_graph_data.csv");
         ofstream of2 = open_file("gdata/" + token + "_graph_colors.txt");
-        of1 << companies[id].back().date << ";"
-            << companies[id].back().close << endl;
+        //ofstream of1 = ofstream("gdata/" + token + "_graph_data.csv");
+        //ofstream of2 = ofstream("gdata/" + token + "_graph_colors.txt");
+        of1 << companies[id][companies[id].size() - 1 - curtime].date << ";"
+            << companies[id][companies[id].size() - 1 - curtime].close << endl;
         of2 << c << endl;
     }
 
@@ -312,6 +318,9 @@ void simulate(ll day0) {
     //tb.save_data();
     cout << "good : " << g1 << endl;
     cout << "bad : " << b1 << endl;
+
+    tb.save_data();
+    tb.save_package();
 }
 
 void help() {
@@ -363,6 +372,6 @@ int main() {
 
     if (check_rebuild()) rebuild(1000000);
 
-    //simulate(250);
-    help();             //раскоментировать - redistribute
+    simulate(250);
+    //help();             //раскоментировать - redistribute
 }
