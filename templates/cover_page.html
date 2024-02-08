@@ -92,15 +92,25 @@
         user-select: none;
       }
 
-      @media (min-width: 768px) {
+      @media (min-width: 768px) { 
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
         }
       }
+      h1 {
+        font-size: 48px;
+      }
+      p { 
+        font-size: 36px;
+      }
+      body {
+        background-image: url(https://catherineasquithgallery.com/uploads/posts/2021-02/1614439790_57-p-temnii-fon-dlya-saita-61.jpg);
+        background-size:contain;
+      }
     </style>
     <!-- Custom styles for this template -->
     <link href="{{url_for('static', filename='./css/cover.css')}}" rel="stylesheet"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"></head>
-<body class="d-flex h-100 text-center text-white bg-dark">
+<body class="d-flex h-100 text-center text-white bg-dark" >
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="mb-auto">
     <div>
@@ -112,17 +122,14 @@
       </nav>
     </div>
   </header>
-
-  <main class="px-3">
-    <h1>Страница обложки</h1>
-    <p class="lead">Обложка - это одностраничный шаблон для создания простых и красивых домашних страниц. Загрузите, отредактируйте текст и добавьте свою собственную полноэкранную фоновую фотографию, чтобы сделать ее своей собственной.</p>
-    <p class="lead">
-      <a href="https://bootstrap5.ru/examples/cover#" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">Подробнее</a>
-    </p>
-  </main>
+  <h1>Вы удачно вошли в аккаунт!</h1>
+  <p>Ваш логин: {{ current_user.name }}</p>
+  <p>Ваша почта: {{current_user.email}}</p>
+  <p>  
+    <a href="/" class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">Выйти из аккаунта</a>
+  </p>
 
   <footer class="mt-auto text-white-50">
-    <p>Шаблон обложки для <a href="https://getbootstrap.com/" class="text-white">Bootstrap</a>, от <a href="https://twitter.com/mdo" class="text-white">@mdo</a>.</p>
   </footer>
 </div><script type="text/javascript" async="" src="{{url_for('static', filename='./js/analytics.js')}}"></script><script type="text/javascript" async="" src=""></script><script async="" src="{{url_for('static', filename='./js/tag.js')}}"></script><script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->

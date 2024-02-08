@@ -48,7 +48,7 @@
         }
         td{
           font-size: 36px;
-          padding: 10px 80px;
+          padding: 10px 60px;
         }
         table {
           font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
@@ -59,7 +59,7 @@
         th{
           background: rgb(18, 6, 3);
           color: white;
-          padding: 10px 80px;
+          padding: 10px 60px;
         } 
         th, td {
           border-style: solid;
@@ -67,25 +67,30 @@
           border-color: white;
         }
         td {
-           background: #18d23d;
+           background: #c6d218;
         }
         th:first-child, td:first-child {
-           text-align: left;
+           text-align: center;
         }
         .col-md-7 p{
-          color: black;
+          color: rgb(255, 255, 255);
           font-size: 45px;
         }
         h1 {
+          color: white;
           font-size: 60px;
         }
+        h2 {
+          color:rgb(215, 55, 15);
+          text-shadow: 1px 1px 1px #000000;
+        }
       </style>
-      <!-- Custom styles for this template -->
+      <!-- Custom styles for this template -->  
       <link href="/css/examples/grid.css" rel="stylesheet"></head>
 {% endblock head %}
 
 {% block body %}
-<body style="background-image: url(http://top-fon.com/uploads/posts/2022-09/1663876461_13-top-fon-com-p-serii-fon-tekhnologicheskii-foto-14.jpg)">
+<body style="background-image: url(static/pictures/legion-abstract-8k-5p-2880x1800.jpg)">
 <br>
 <br>
 <br>
@@ -93,19 +98,19 @@
 <br>
 <div class="row featurette">
   <div class="col-md-7">    
-    <p class="lead" style="margin-right: 160px;">
+    <p style="margin-right: 120px;">
       Справа вы можете видеть количество купленных акций у разных компаний.
       Вы можете остановить работу бота в любой момент.
     </p>
     <br>
     <h2>Ваш текущий баланс: {{MONEY}} USD</h2>
-    <p class="lead" style="margin-right: 160px;">
+    <p style="margin-right: 120px;">
       Напоминаем, что текущие цены акций различных компаний можно узнать <a href="/dashboard/GOOG">здесь</a>.
       По всем вопросам: sutir2546@mail.ru
     </p>
   </div>
   <div class="col-md-5">
-    <table border="2px" align="right">
+    <table border="2px" align="right" style="margin-left: 220px">
       <tr>  s
         <th>Компания</th>
         <th>Количество акций</th> 

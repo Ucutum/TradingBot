@@ -98,16 +98,23 @@
           font-size: 3.5rem;
         }
       }
+      body {
+        background-image: url(https://catherineasquithgallery.com/uploads/posts/2021-02/1614439790_57-p-temnii-fon-dlya-saita-61.jpg);
+        background-size:contain;
+      }
+      h1 {
+        color:white;
+      }
     </style>
 
     
     <!-- Custom styles for this template -->
     <link href="{{url_for('static', filename='./css/signin.css')}}" rel="stylesheet"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"></head>
 <body class="text-center">
+  <h1>Пожалуйста войдите <br>
+    в аккаунт!</h1>
   <form class="form-signin" method="post">
     {{ form.hidden_tag() }}
-    <img class="mb-4" src="" alt="логотип bootstrap" width="72" height="72">
-    <h1 class="h3 mb-3 font-weight-normal">Пожалуйста зарегестрируйтесь</h1>
     {% for message in get_flashed_messages() %}
   <div class="alert alert-danger" role="alert">
       {{ message }}

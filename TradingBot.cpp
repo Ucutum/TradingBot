@@ -21,6 +21,9 @@ const ll MSIZE = 5000;
 
 struct candle {
     dl open, close, low, high, mid;
+
+    string date;
+
     candle(dl mid = 0) : open(mid), close(mid), low(mid), high(mid), mid(mid) {}
     candle(dl open, dl close, dl low, dl high) : open(open), close(close), low(low), high(high), mid((open + close + low + high) / 4) {}
 };
@@ -29,6 +32,18 @@ using graph = vector<candle>;
 
 vector<graph> companies;
 vector<string> company_names;
+
+ofstream open_file(string name) {
+    vector<string> vec;
+    ifstream fin(name);
+    string s;
+    while (getline(fin, s)) {
+        vec.push_back(s);
+    }
+    ofstream fout(name);
+    for (auto str : vec) fout << str << endl;
+    return fout;
+}
 
 void load_data(string name) {
     fstream fin(name);
@@ -51,14 +66,17 @@ void load_data(string name) {
     while (getline(fin, s)) {
         ll cnt = 0;
         string num = "";
+        string date = "";
         for (auto sym : s) {
             if (sym == ' ') continue;
             if (sym == ',') sym = '.';
             if (cnt == ncnt && sym != ';') num.push_back(sym);
+            if (cnt == 0 && sym != ';') date.push_back(sym);
             if (sym == ';') cnt++;
         }
         if (num.empty()) continue;
         g.push_back(stod(num));
+        g.back().date = date;
     }
     //reverse(g.begin(), g.end());
     companies.push_back(g);
@@ -93,9 +111,9 @@ struct tradeBot {
 
     void save_package() {
         ofstream pack_fout = ofstream("gdata/Package_" + exchange + ".txt");
-        pack_fout << "MONEY " << balance << endl;
+        pack_fout << "MONEY " << balance << " " << 1 << endl;
         for (ll i = 0; i < company_count; i++) {
-            pack_fout << company_names[i] << " " << share_count[i] << endl;
+            pack_fout << company_names[i] << " " << share_count[i] << " " << companies[i].back().close << endl;
         }
     }
 
@@ -113,6 +131,15 @@ struct tradeBot {
         ad_fout = ofstream("gdata/Advice_" + exchange + ".txt");
     }
 
+    void add_operation(ll id, char c) {
+        string token = company_names[id];
+        ofstream of1 = open_file("gdata/" + token + "_graph_data.csv");
+        ofstream of2 = open_file("gdata/" + token + "_graph_colors.txt");
+        of1 << companies[id].back().date << ";"
+            << companies[id].back().close << endl;
+        of2 << c << endl;
+    }
+
     void sell(ll id) {
         balance += share_count[id] * companies[id][companies[id].size() - 1 - curtime].close * ((dl)1 - commission);
         share_count[id] = 0;
@@ -128,11 +155,13 @@ struct tradeBot {
             cout << "SELL ALL of " << company_names[id] << endl;
             ad_fout << company_names[id] << " -" << share_count[id] << endl;
         }
+        add_operation(id, 'r');
     }
 
     void buy(ll id, dl cost, dl fall_sz) {
         cost *= (1 - (dl)commission);
         if (cost < 1e-15) return;
+        if (fall_sz > 1.1) return;
         dl cnt = cost / companies[id][companies[id].size() - 1 - curtime].close;
         cnt = (ll)cnt;
         if ((ll)cnt == 0) return;
@@ -146,6 +175,7 @@ struct tradeBot {
             cout << "BUY " << cnt << " shares of " << company_names[id] << endl;
             ad_fout << company_names[id] << " " << cnt << endl;
         }
+        add_operation(id, 'g');
     }
 
     void make() {
@@ -269,11 +299,15 @@ void simulate(ll day0) {
     ll day = 1;
     for (ll i = 0; tb.curtime >= 0; i++) {
         cout << "day " << day << " : " << tb.summary << endl;
+        if (day == 125) {
+            ll h = 0;
+        }
         fff << (ll)(((tb.summary / 100000) - 1) * 10000) << endl;
         tb.make();
         tb.curtime--;
         day++;
         //Sleep(300);
+        tb.save_data();
     }
     //tb.save_data();
     cout << "good : " << g1 << endl;
@@ -299,6 +333,15 @@ void rebuild(ll money) {
     tb.save_package();
 }
 
+bool check_rebuild() {
+    tradeBot tb(0.4, 0.0005);
+    for (ll i = 0; i < tb.company_count; i++) {
+        ifstream fin = ifstream("gdata/" + company_names[i] + "_" + tb.exchange);
+        if (!fin) return true;
+    }
+    return false;
+}
+
 int main() {
     cout << fixed;
     cout.precision(2);
@@ -310,14 +353,16 @@ int main() {
         string s2 = "";
         bool ww = false;
         for (auto sym : s) {
-            if (ww && sym >= 'A' && sym <= 'Z') s2.push_back(sym);
+            if (ww && ((sym >= 'A' && sym <= 'Z') || sym == '-')) s2.push_back(sym);
+            if (sym == ';' && ww) break;
             if (sym == ';') ww = true;
         }
         load_data(foldername + "/" + s2 + ".csv");
         company_names.push_back(s2);
     }
 
-    //simulate(20);
-    rebuild(1000000);   //раскоментировать - prepareFiles
+    if (check_rebuild()) rebuild(1000000);
+
+    //simulate(250);
     help();             //раскоментировать - redistribute
 }

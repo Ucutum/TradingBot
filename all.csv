@@ -1,10 +1,19 @@
-Google;GOOG
-Apple;AAPL
-Yandex;YNDX
-QIWI;QIWI
-NVIDIA Corporation;NVDA
-Amazon;AMZN
-PayPal;PYPL
-UBER;UBER
-AMD;AMD
-Intel Corporation;INTC
+NVIDIA Corporation;NVDA;NASDAQ
+Amazon;AMZN;NASDAQ
+PayPal;PYPL;NASDAQ
+UBER;UBER;NASDAQ
+AMD;AMD;NASDAQ
+Intel Corporation;INTC;NASDAQ
+Яндекс;YNDX;MOEX
+ВТБ;VTBR;MOEX
+ВК;VKCO;MOEX
+Мечел;MTLR;MOEX
+OZON;OZON;MOEX
+Сбербанк;SBER;MOEX
+O'Key;OKEY;MOEX
+Аэрофлот;AFLT;MOEX
+Газпром;GAZP;MOEX
+Детский Мир;DSKY;MOEX
+Bitcoin;BTC-USD;NASDAQ
+Etherium;ETH-USD;NASDAQ
+Litecoin;LTC-USD;NASDAQ

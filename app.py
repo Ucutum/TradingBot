@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, abort, redirect, request, flash
+from flask import Flask, render_template, url_for, abort, redirect, request, flash, send_file
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 
 app = Flask(__name__)
@@ -9,17 +9,33 @@ from data.users import User
 from data.stocks import Stock
 from data.companies import Company
 import os
-
+import csv
+import subprocess
 
 from forms.login_form import LogInForm
 from forms.singup_form import SingUpForm
+import json
+
+from graph_creator import remove_trailing_empty_lines
+
+
+
+with open('settings.json', 'r') as f:
+    settings = json.load(f)
 
 
 global_init(os.path.join("db", "database.db"))
+if settings["system"] == "Windows":
+    run_command = ["./TradingBot.exe"] 
+elif settings["system"] == "Linux":
+    run_command = ["./TradingBot"]
+else:
+    run_command = ["./TradingBot"]
 
 
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -56,7 +72,7 @@ def subscription_purchased_page():
     return render_template('subscription_purchased_page.html')
 
 
-@app.route('/cost', methods=['GET', 'POST'])
+@app.route('/subscriptions', methods=['GET', 'POST'])
 def cost_page():
     if current_user.is_authenticated:
         if current_user.subscription:
@@ -73,73 +89,121 @@ def cost_page():
             return redirect(url_for('subscription_purchased_page'))
     return render_template('cost_page.html')
 
-@app.route('/cover')
+@app.route('/personal_area')
 def cover_page():
     return render_template('cover_page.html')
+
+@app.route("/graphs/<string:filename>")
+def return_csv(filename):
+    return send_file("graphs/" + filename)
 
 @app.route('/dashboard/<company_token>')
 def dashboard_page(company_token):
     if company_token == "first":
-        company_token = "GOGL"
-    free_companies = [
-        {"title": "Google", "active": False, "token": "GOGL"},
-        {"title": "Вконтакте", "active": False, "token": "VKCO"}
-    ]
+        company_token = "NVDA"
+
+    free_companies = []
+    with open('all.csv', newline='', encoding="utf-8") as f:
+        spamreader = list(csv.reader(f, delimiter=';'))
+
+        for row in list(spamreader)[:len(list(spamreader)) // 2]:
+            free_companies.append({"title" : row[0], "active" : False, "token" : row[1]})
+
+
     for company in free_companies:
         if company["token"] == company_token:
             company["active"] = True
-    paid_companies = [
-        {"title": "Сбербанк", "active": False, "token": "SBER"},
-        {"title": "Тинькофф", "active": False, "token": "TCSG"},
-        {"title": "Яндекс", "active": False, "token": "YNDX"},
-        {"title": "Газпром", "active": False, "token": "GAZP"},
-        {"title": "Татнефть", "active": False, "token": "TATN"},
-        {"title": "Мечел", "active": False, "token": "MTLR"},
-        {"title": "Лукойл", "active": False, "token": "LKOH"},
-        {"title": "Аэрофлот", "active": False, "token": "AFLT"},
-        {"title": "Сургутнефтегаз", "active": False, "token": "SNGS"},
-        {"title": "МТС", "active": False, "token": "MTSS"},
-        {"title": "Магнит", "active": False, "token": "MGNT"},
-        {"title": "Новатэк", "active": False, "token": "NVTK"},
-        {"title": "М.Видео", "active": False, "token": "MVID"},
-        {"title": "Татнефть", "active": False, "token": "TATN"},
-        {"title": "НЛМК", "active": False, "token": "NLMK"},
-        {"title": "Эн+", "active": False, "token": "ENPG"},
-        {"title": "ММК", "active": False, "token": "MAGN"},
-        {"title": "Северсталь", "active": False, "token": "CHMF"},
-        {"title": "АФК Система", "active": False, "token": "AFKS"},
-        {"title": "Трубная Металлургическая Компания", "active": False, "token": "TRMK"},
-        {"title": "Мосэнерго", "active": False, "token": "MSNG"},
-        {"title": "ФосАгро", "active": False, "token": "PHOR"},
-        {"title": "РусГидро", "active": False, "token": "HYDR"},
-        {"title": "Полюс", "active": False, "token": "PLZL"},
-        {"title": "АЛРОСА", "active": False, "token": "ALRS"},
-        {"title": "РосНефть", "active": False, "token": "RNFT"},
-        {"title": "КАМАЗ", "active": False, "token": "KMAZ"},
-        {"title": "Россети Московский Регион", "active": False, "token": "MSRS"},
-        {"title": "Детский Мир", "active": False, "token": "DSKY"},
-        {"title": "Группа Черкизово", "active": False, "token": "GCHE"},
-        {"title": "Совкомфлот", "active": False, "token": "FLOT"},
-        {"title": "СОЛЛЕРС", "active": False, "token": "SVAV"},
-        {"title": "Юнипро", "active": False, "token": "UPRO"},
-    ]
+
+    paid_companies = list()
+    free_companies_data = list()
+    paid_companies_data = list()
+    
+    with open('all.csv', newline='', encoding="utf-8") as f:
+        spamreader = list(csv.reader(f, delimiter=';'))
+
+        for row in list(spamreader)[len(list(spamreader))//2:]:
+            paid_companies.append({"title" : row[0], "active" : False, "token" : row[1]})
+
     for company in paid_companies:
         if company["token"] == company_token:
             company["active"] = True
+            
+    for company in free_companies:
+        symbol = company["token"]
+        with open(f'graphs/{symbol}.csv', newline='', encoding="utf-8") as f:
+            for idx, row in enumerate(reversed(list(csv.reader(f, delimiter=';')))):
+                if idx == 0: continue
+                if idx > 30: break
+                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : round(float(row[1]), 2), "High" : round(float(row[2]), 2), "Low" : round(float(row[3]), 2), "Close" : round(float(row[4]), 2), "Volume" : int(float(row[5]))})
+        
+    for company in paid_companies:
+        symbol = company["token"]
+        with open(f'graphs/{symbol}.csv', newline='', encoding="utf-8") as f:
+            for idx, row in enumerate(reversed(list(csv.reader(f, delimiter=';')))):
+                if idx == 0: continue
+                if idx > 30: break
+                free_companies_data.append({"Symbol" : symbol, "Date" : row[0], "Open" : round(float(row[1]), 2), "High" : round(float(row[2]), 2), "Low" : round(float(row[3]), 2), "Close" : round(float(row[4]), 2), "Volume" : int(float(row[5]))})
+
+    canwatch = False
+    if company_token in [i["token"] for i in free_companies]:
+        canwatch = True
+    elif company_token in [i["token"] for i in paid_companies]:
+        if current_user.is_authenticated:
+            if current_user.subscription:
+                canwatch = True
+    print(canwatch, company_token)
+
+
     data = {
         "free_companies": free_companies,
         "paid_companies": paid_companies,
-        "company_token": company_token
+        "company_token": company_token,
+        "free_companies_data" : free_companies_data,
+        "paid_companies_data" : paid_companies_data,
+        "canwatch" : canwatch
     }
+    # print(data["free_companies"])
+
     return render_template('dashboard_page.html', **data)
+
+@app.route("/stat")
+def futer_page():
+    subprocess.run(run_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    
+    shares = list()
+    data = dict()
+
+    remove_trailing_empty_lines("gdata/Package_.txt")
+
+    with open("gdata/Package_.txt", "r", newline="") as f:
+        lines = f.readlines()
+        for item in lines:
+            title, cost, _ = item.split()
+            if title == "MONEY": data[title] = cost
+            else: shares.append({"title" : title, "cost" : cost})
+
+    data['current_shares'] = shares
+
+    return render_template('futer_page.html', **data)
+
+def get_graphs_paths():
+    '''дает ссылки на графики прогы Артема'''
+    with open("all.csv") as f:
+        companies = [e for e in csv.reader(f, delimiter=";")]
+    return list(filter(lambda x: x is not None, [(
+            (i[0], f"graph/{i[1]}_graph.png") if
+         os.path.exists(f"static/graph/{i[1]}_graph.png"
+                        ) else None) for i in companies]))
 
 @app.route("/ai_strategy")
 def ai_strategy_page():
-    return render_template('ai_strategy.html')
-
-@app.route("/futer")
-def futer_page():
-    return render_template('futer_page.html')
+    companies = get_graphs_paths()
+    print(companies)
+    graphs = [
+        {"name": i[0],
+         "img":f"{i[1]}"}
+               for i in companies]
+    return render_template('ai_strategy.html', graphs=graphs)
 
 @login_manager.unauthorized_handler
 @app.route("/login", methods=["GET", "POST"])
@@ -159,7 +223,6 @@ def login_page():
                 login_user(user)
                 return redirect(url_for("cover_page"))
     return render_template('login_page.html', form=form)
-
 
 @app.route("/singup", methods=["GET", "POST"])
 def singup_page():
@@ -190,13 +253,34 @@ def singup_page():
                         return redirect(url_for("login_page"))
     return render_template('singup_page.html', form=form)
 
-
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('cover_page'))
 
+@app.route('/cancel_subscription')
+def cancel_subscription_page():
+    if not current_user.is_authenticated:
+        return abort(403)
+    return render_template('cancel_subscription_page.html')
+
+@app.route('/cover2', methods=['GET', 'POST'])
+def cover2_page():
+    if current_user.is_authenticated:
+        if not current_user.subscription:
+            return redirect(url_for('на покупку'))
+    if request.method == 'POST':
+        if not current_user.is_authenticated:
+            flash("Войдите в систему для покупки")
+            return redirect(url_for('login_page'))
+        else:
+            session = create_session()
+            user = session.query(User).get(current_user.id)
+            user.subscription = False
+            session.commit()
+            return redirect(url_for('cancel_subscription_page'))
+    return render_template('cover2_page.html')
 
 @app.route("/ordering")
 def ordering_page():
@@ -211,7 +295,7 @@ def error404page(error):
     }
     return render_template('error_page.html', **data), 404
 
-    
+
 @app.errorhandler(403)
 def error403page(error):
     data = {
