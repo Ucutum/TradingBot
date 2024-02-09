@@ -199,7 +199,6 @@ else:
     last_update = None
 
 
-@app.route("/update_data")
 def update_data():
     global last_update
 
@@ -354,4 +353,5 @@ def error500page(error):
 
 
 if __name__ == '__main__':
+    update_data()
     app.run(debug=True)
