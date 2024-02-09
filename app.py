@@ -11,31 +11,18 @@ from data.stocks import Stock
 from data.companies import Company
 import os
 import csv
-import subprocess
 import datetime
-from csv_parser import parse
-from create_al_graphs import create_all
 
 from forms.login_form import LogInForm
 from forms.singup_form import SingUpForm
 import json
 
 from graph_creator import remove_trailing_empty_lines
-import graph_creator
-
+from tasks import data_updating
 
 
 with open('settings.json', 'r') as f:
     settings = json.load(f)
-
-
-global_init(os.path.join("db", "database.db"))
-if settings["system"] == "Windows":
-    run_command = ["./TradingBot.exe"] 
-elif settings["system"] == "Linux":
-    run_command = ["./TradingBot"]
-else:
-    run_command = ["./TradingBot"]
 
 
 login_manager = LoginManager(app)
@@ -204,29 +191,30 @@ def get_graphs_paths():
                         ) else None) for i in companies]))
 
 
+
 last_update = settings.get("last_update", None)
+if last_update is not None:
+    last_update = datetime.datetime.strptime(last_update, "%Y-%m-%d %H:%M:%S.%f")
+else:
+    last_update = None
 
 
 @app.route("/update_data")
 def update_data():
+    global last_update
+
     if last_update is None:
-        parse("graphs/")
-        subprocess.run([run_command])
-        create_all()
-        graph_creator.main()
-        last_update = datetime.now()
-        settings["last_update"] = last_update
+        last_update = datetime.datetime.now()
+        settings["last_update"] = str(last_update)
         with open("settings.json", "w") as f:
             json.dump(settings, f)
-    elif last_update + datetime.timedelta(days=1) < datetime.now():
-        parse("graphs/")
-        subprocess.run([run_command])
-        create_all()
-        graph_creator.main()
-        last_update = datetime.now()
-        settings["last_update"] = last_update
+        data_updating.apply_async()
+    elif last_update + datetime.timedelta(days=1) < datetime.datetime.now():
+        last_update = datetime.datetime.now()
+        settings["last_update"] = str(last_update)
         with open("settings.json", "w") as f:
             json.dump(settings, f)
+        data_updating.apply_async()
     return "OK"
 
 

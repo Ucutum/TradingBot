@@ -20,9 +20,9 @@ def craete_graph(data, company_token):
         'Date': 'date'
     }, inplace=True)
     data.set_index('date', inplace=True)
-    d = data.index[-6]
-    print("!!!", d)
-    print(data)
+    d = data.index[-1]
+    # print("!!!", d)
+    # print(data)
     mpf.plot(
         data, type='candle',
         savefig=f"static/graph/{company_token}_graph.png",
@@ -47,6 +47,7 @@ def main():
     with open("all.csv") as f:
         companies = [e[1] for e in csv.reader(f, delimiter=";")]
     # companies = ["QIWI"]
+    companies = ["AMD"]
 
     for company in companies:
         if not os.path.exists(f"models/{company}_model.h5"):
@@ -54,15 +55,19 @@ def main():
         write_data(request_stocks(datetime.datetime(2000, 1, 1), company), "models/" + company + ".csv")
         remove_trailing_empty_lines(f"graphs/{company}.csv")
         data = read_data(f"graphs/{company}.csv", delimiter=';')
-        # data = read_data("models/YNDX_000101_240101.csv", delimiter=';')
-        x = np.array([np.array(data[["Open", "Close"]].mean(axis=1))[-100:]])
-        print(x)
+        # x = np.array([np.array(data[["Open", "Close"]].mean(axis=1))[-100:]])
+        x = data[["Close"]].to_numpy()
+        x = np.array([x[:, 0][-100:]])
+        # x = np.array(x)
+        print("X1", x)
         x, mxx = grounding_one(x)
         model = load_model(f"models/{company}_model.h5")
+        print("X2", x)
         p = model.predict(x)
         p = ungrounding_one(p, mxx)[0].tolist()
 
-        print(data[-100:].tail(6))
+        # print(data[-100:].tail(6))
+        print("P", p)
 
         last = data['Close'][len(data) - 1]
         for i in range(1):
@@ -72,7 +77,7 @@ def main():
             if str(p[i]) == "nan":
                 p[i] = last
                 print("WARNING NAN")
-            print(p[i])
+            # print(p[i])
             prow = {
                 'Date': next_day,
                 'Open': last,
@@ -84,8 +89,9 @@ def main():
             last = p[i]
             data.loc[len(data)] = prow
             # data[len(data)] = prow
-        print(data[-100:].tail(6))
+        # print(data[-100:].tail(6))
         craete_graph(data[-100:], company)
+        print("Done", company)
 
 
 if __name__ == '__main__':
