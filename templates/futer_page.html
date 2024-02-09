@@ -10,7 +10,7 @@
   <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors, Alexey Golyagin">
   <meta name="docsearch:language" content="ru">
   <meta name="docsearch:version" content="5.0">
-  <title>Бесплатный bootstrap 5 шаблон - Grid</title>
+  <title>Первая стратегия</title>
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
   <link rel="stylesheet" href="https://bootstrap5.ru/css/docs.css">
@@ -76,7 +76,11 @@
           color: rgb(255, 255, 255);
           font-size: 45px;
         }
-        h1 {
+        .col-md-5 p {
+          color: rgb(255, 255, 255);
+          font-size: 45px;
+        }
+        h1 {    
           color: white;
           font-size: 60px;
         }
@@ -94,36 +98,38 @@
 <br>
 <br>
 <br>
-<h1 align="center">Прогнозы первой стратегии</h1>
+<h1 align="center" style="color:rgb(226, 250, 11);">Прогнозы первой стратегии</h1>
 <br>
 <div class="row featurette">
   <div class="col-md-7">    
     <p style="margin-right: 120px;">
-      Справа вы можете видеть количество купленных акций у разных компаний.
+      Ниже вы можете наблюдать, как бот распределяет ваши средства на покупку акций.
       Вы можете остановить работу бота в любой момент.
     </p>
     <br>
     <h2>Ваш текущий баланс: {{MONEY}} USD</h2>
-    <p style="margin-right: 120px;">
+  </div>  
+  <div class="col-md-5">
+    <p>
       Напоминаем, что текущие цены акций различных компаний можно узнать <a href="/dashboard/GOOG">здесь</a>.
       По всем вопросам: sutir2546@mail.ru
     </p>
   </div>
-  <div class="col-md-5">
-    <table border="2px" align="right" style="margin-left: 220px">
-      <tr>  s
-        <th>Компания</th>
-        <th>Количество акций</th> 
-      </tr> 
-      {% for share in current_shares %}
-          <tr>
-            <td>{{share.title}}</td>  
-            <td>{{share.cost}}</td>
-          </tr>
-      {% endfor %}
-      </table>
-  </div>
 </div>
+<table border="2px" align="center">
+  <tr>  s
+    <th>Компания</th>
+    <th>Доля потраченых средств</th> 
+    <th>Потрачено средств</th>
+  </tr> 
+  {% for share in current_shares %}
+      <tr>
+        <td>{{share.title}}</td>  
+        <td>{{share.cost}}%</td>
+        <td>{{share.spend}}</td>
+      </tr>
+  {% endfor %}
+  </table>
 </script>
 <!-- Yandex.Metrika counter --> <script type="text/javascript" > (function(m,e,t,r,i,k,a){ m[i]=m[i]||function(){ (m[i].a=m[i].a||[]).push(arguments) }; m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)}) (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym"); ym(67718821, "init", { clickmap:true, trackLinks:true, accurateTrackBounce:true, webvisor:true }); </script> <noscript><div><img src="https://mc.yandex.ru/watch/67718821" style="position:absolute; left:-9999px;" alt="" /></div></noscript> <!-- /Yandex.Metrika counter -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>

@@ -12,12 +12,16 @@ from data.companies import Company
 import os
 import csv
 import subprocess
+import datetime
+from csv_parser import parse
+from create_al_graphs import create_all
 
 from forms.login_form import LogInForm
 from forms.singup_form import SingUpForm
 import json
 
 from graph_creator import remove_trailing_empty_lines
+import graph_creator
 
 
 
@@ -167,9 +171,8 @@ def dashboard_page(company_token):
 
     return render_template('dashboard_page.html', **data)
 
-@app.route("/stat")
+@app.route("/strategy")
 def futer_page():
-    subprocess.run(run_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     
     shares = list()
     data = dict()
@@ -178,10 +181,14 @@ def futer_page():
 
     with open("gdata/Package_.txt", "r", newline="") as f:
         lines = f.readlines()
+        full_money = 0.0
         for item in lines:
-            title, cost, _ = item.split()
+            y, c, cn = item.split()     
+            if(y != "MONEY"): full_money += float(c) * float(cn)
+        for item in lines:
+            title, cost, cost_one = item.split()
             if title == "MONEY": data[title] = cost
-            else: shares.append({"title" : title, "cost" : cost})
+            else: shares.append({"title" : title, "cost" : round(float(cost) * float(cost_one) / full_money * 100, 2), "spend" : round(float(cost) * float(cost_one), 2)})
 
     data['current_shares'] = shares
 
@@ -195,6 +202,33 @@ def get_graphs_paths():
             (i[0], f"graph/{i[1]}_graph.png") if
          os.path.exists(f"static/graph/{i[1]}_graph.png"
                         ) else None) for i in companies]))
+
+
+last_update = settings.get("last_update", None)
+
+
+@app.route("/update_data")
+def update_data():
+    if last_update is None:
+        parse("graphs/")
+        subprocess.run([run_command])
+        create_all()
+        graph_creator.main()
+        last_update = datetime.now()
+        settings["last_update"] = last_update
+        with open("settings.json", "w") as f:
+            json.dump(settings, f)
+    elif last_update + datetime.timedelta(days=1) < datetime.now():
+        parse("graphs/")
+        subprocess.run([run_command])
+        create_all()
+        graph_creator.main()
+        last_update = datetime.now()
+        settings["last_update"] = last_update
+        with open("settings.json", "w") as f:
+            json.dump(settings, f)
+    return "OK"
+
 
 @app.route("/ai_strategy")
 def ai_strategy_page():
@@ -254,11 +288,15 @@ def singup_page():
                         return redirect(url_for("login_page"))
     return render_template('singup_page.html', form=form)
 
+@app.route('/tologout')
+def tologout():
+    return render_template('cover3_page.html')
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('cover_page'))
+    return redirect(url_for('login_page'))
 
 @app.route('/cancel_subscription')
 def cancel_subscription_page():

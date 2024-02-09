@@ -10,7 +10,7 @@
 <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors, Alexey Golyagin">
 <meta name="docsearch:language" content="ru">
 <meta name="docsearch:version" content="5.0">
-<title>Бесплатный bootstrap 5 шаблон - Обложка</title>
+<title>Текущая подписка</title>
 <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="{{url_for('static', filename='./css/bootstrap.min.css')}}" crossorigin="anonymous">
 <link rel="stylesheet" href="{{url_for('static', filename='./css/docs.css')}}">
@@ -61,7 +61,7 @@
 <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors, Alexey Golyagin">
 <meta name="docsearch:language" content="ru">
 <meta name="docsearch:version" content="5.0">
-<title>Бесплатный bootstrap 5 шаблон - Обложка</title>
+<title>Текущая подписка</title>
 <!-- Bootstrap core CSS -->
 <link rel="stylesheet" href="{{url_for('static', filename='./css/bootstrap.min.css')}}" crossorigin="anonymous">
 <link rel="stylesheet" href="{{url_for('static', filename='./css/docs.css')}}">
@@ -92,22 +92,28 @@
         user-select: none;
       }
 
-      @media (min-width: 768px) {
+      @media (min-width: 768px) { 
         .bd-placeholder-img-lg {
           font-size: 3.5rem;
         }
+      }
+      h1 {
+        font-size: 48px;
+      }
+      p { 
+        font-size: 36px;
       }
       body {
         background-image: url(https://catherineasquithgallery.com/uploads/posts/2021-02/1614439790_57-p-temnii-fon-dlya-saita-61.jpg);
         background-size:contain;
       }
-      h1 {
-        color:white;
+      .y {
+        font-size: 24px;
       }
     </style>
     <!-- Custom styles for this template -->
     <link href="{{url_for('static', filename='./css/cover.css')}}" rel="stylesheet"><meta http-equiv="origin-trial" content="AymqwRC7u88Y4JPvfIF2F37QKylC04248hLCdJAsh8xgOfe/dVJPV3XS3wLFca1ZMVOtnBfVjaCMTVudWM//5g4AAAB7eyJvcmlnaW4iOiJodHRwczovL3d3dy5nb29nbGV0YWdtYW5hZ2VyLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjk1MTY3OTk5LCJpc1RoaXJkUGFydHkiOnRydWV9"></head>
-<body class="d-flex h-100 text-center text-white bg-dark">
+<body class="d-flex h-100 text-center text-white bg-dark" >
 <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
   <header class="mb-auto">
     <div>
@@ -119,14 +125,14 @@
       </nav>
     </div>
   </header>
+  <h1>Вы удачно вошли в аккаунт!</h1>
+  <p>Ваш логин: {{ current_user.name }}</p>
+  <p>Ваша почта: {{current_user.email}}</p>
+  <form action="/logout"> 
+    <button class="btn btn-lg btn-secondary font-weight-bold border-white bg-white">Выйти из аккаунта</button>
+  </form>
 
-  <main class="px-16">
-    <h1 style="font-size: 56px;">Поздравляем с получением подписки!</h1>
-    <p style="font-size: 36px;">Теперь у вас активна подписка Pro!<br>
-    </p>
-  </main>
-
-  <footer class="mt-auto text-white-50">  
+  <footer class="mt-auto text-white-50">
   </footer>
 </div><script type="text/javascript" async="" src="{{url_for('static', filename='./js/analytics.js')}}"></script><script type="text/javascript" async="" src=""></script><script async="" src="{{url_for('static', filename='./js/tag.js')}}"></script><script src="{{url_for('static', filename='./js/bootstrap.bundle.min.js')}}"></script>
 <!-- Global site tag (gtag.js) - Google Analytics -->
