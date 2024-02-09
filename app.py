@@ -11,12 +11,16 @@ from data.companies import Company
 import os
 import csv
 import subprocess
+import datetime
+from csv_parser import parse
+from create_al_graphs import create_all
 
 from forms.login_form import LogInForm
 from forms.singup_form import SingUpForm
 import json
 
 from graph_creator import remove_trailing_empty_lines
+import graph_creator
 
 
 
@@ -197,6 +201,33 @@ def get_graphs_paths():
             (i[0], f"graph/{i[1]}_graph.png") if
          os.path.exists(f"static/graph/{i[1]}_graph.png"
                         ) else None) for i in companies]))
+
+
+last_update = settings.get("last_update", None)
+
+
+@app.route("/update_data")
+def update_data():
+    if last_update is None:
+        parse("graphs/")
+        subprocess.run([run_command])
+        create_all()
+        graph_creator.main()
+        last_update = datetime.now()
+        settings["last_update"] = last_update
+        with open("settings.json", "w") as f:
+            json.dump(settings, f)
+    elif last_update + datetime.timedelta(days=1) < datetime.now():
+        parse("graphs/")
+        subprocess.run([run_command])
+        create_all()
+        graph_creator.main()
+        last_update = datetime.now()
+        settings["last_update"] = last_update
+        with open("settings.json", "w") as f:
+            json.dump(settings, f)
+    return "OK"
+
 
 @app.route("/ai_strategy")
 def ai_strategy_page():
