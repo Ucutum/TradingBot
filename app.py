@@ -178,6 +178,7 @@ def get_graphs_paths():
 
 @app.route("/strategy")
 def futer_page():
+    update_data()
     companies = get_graphs_paths()
     print(companies)
     graphs = [
@@ -232,6 +233,7 @@ def update_data():
 
 @app.route("/ai_strategy")
 def ai_strategy_page():
+    update_data()
     companies = get_graphs_paths_alg()
     print(companies)
     graphs = [
