@@ -158,9 +158,32 @@ def dashboard_page(company_token):
 
     return render_template('dashboard_page.html', **data)
 
+def get_graphs_paths_alg():
+    '''дает ссылки на графики прогы Артема'''
+    with open("all.csv") as f:
+        companies = [e for e in csv.reader(f, delimiter=";")]
+    return list(filter(lambda x: x is not None, [(
+            (i[0], f"graph/{i[1]}_alggraph.png") if
+         os.path.exists(f"static/graph/{i[1]}_graph.png"
+                        ) else None) for i in companies]))
+
+def get_graphs_paths():
+    '''дает ссылки на графики прогы Артема'''
+    with open("all.csv") as f:
+        companies = [e for e in csv.reader(f, delimiter=";")]
+    return list(filter(lambda x: x is not None, [(
+            (i[0], f"graph/{i[1]}_graph.png") if
+         os.path.exists(f"static/graph/{i[1]}_graph.png"
+                        ) else None) for i in companies]))
+
 @app.route("/strategy")
 def futer_page():
-    
+    companies = get_graphs_paths()
+    print(companies)
+    graphs = [
+        {"name": i[0],
+         "img":f"{i[1]}"}
+               for i in companies]
     shares = list()
     data = dict()
 
@@ -179,17 +202,7 @@ def futer_page():
 
     data['current_shares'] = shares
 
-    return render_template('futer_page.html', **data)
-
-def get_graphs_paths():
-    '''дает ссылки на графики прогы Артема'''
-    with open("all.csv") as f:
-        companies = [e for e in csv.reader(f, delimiter=";")]
-    return list(filter(lambda x: x is not None, [(
-            (i[0], f"graph/{i[1]}_graph.png") if
-         os.path.exists(f"static/graph/{i[1]}_graph.png"
-                        ) else None) for i in companies]))
-
+    return render_template('futer_page.html', **data, graphs=graphs)
 
 
 last_update = settings.get("last_update", None)
@@ -219,7 +232,7 @@ def update_data():
 
 @app.route("/ai_strategy")
 def ai_strategy_page():
-    companies = get_graphs_paths()
+    companies = get_graphs_paths_alg()
     print(companies)
     graphs = [
         {"name": i[0],

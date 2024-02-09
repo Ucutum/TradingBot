@@ -80,25 +80,25 @@
           color: rgb(255, 255, 255);
           font-size: 45px;
         }
-        h1 {    
-          color: white;
-          font-size: 60px;
-        }
         h2 {
           color:rgb(215, 55, 15);
           text-shadow: 1px 1px 1px #000000;
         }
       </style>
+      <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
       <!-- Custom styles for this template -->  
       <link href="/css/examples/grid.css" rel="stylesheet"></head>
 {% endblock head %}
 
 {% block body %}
 <body style="background-image: url(static/pictures/legion-abstract-8k-5p-2880x1800.jpg)">
+<script type="text/javascript">
+  $(document).ready(function(){$("img").click(function(){this.requestFullscreen()})});
+</script>
 <br>
 <br>
 <br>
-<h1 align="center" style="color:rgb(226, 250, 11);">Прогнозы первой стратегии</h1>
+<h1 align="center" style="color:rgb(226, 250, 11);font-size: 70px;">Прогнозы первой стратегии</h1>
 <br>
 <div class="row featurette">
   <div class="col-md-7">    
@@ -130,6 +130,28 @@
       </tr>
   {% endfor %}
   </table>
+  <br>
+  <h1 align="center" style="color:rgb(226, 250, 11);font-size: 50px;">Предсказания на основе технического анализа</h1>
+  <br>
+  <div>
+    <div class="container">
+      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+        {% for g in graphs %}
+        <div class="col">
+          <div class="card shadow-sm">
+            <h1 style="text-align: center">{{ g.name }}</h1>
+            <img src="{{ url_for('static', filename=g.img) }}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <p class="card-text">Прогноз цен акций компании {{ g.name }}</p>
+              <div class="d-flex justify-content-between align-items-center">
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
   <button id="update_data">Отправить запрос</button>
   <script src="{{ url_for('static', filename='js/update_data.js') }}"></script>
 </script>
