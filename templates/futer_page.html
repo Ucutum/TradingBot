@@ -10,7 +10,7 @@
   <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors, Alexey Golyagin">
   <meta name="docsearch:language" content="ru">
   <meta name="docsearch:version" content="5.0">
-  <title>Первая стратегия</title>
+  <title>Технический анализ</title>
   <!-- Bootstrap core CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
   <link rel="stylesheet" href="https://bootstrap5.ru/css/docs.css">
@@ -112,7 +112,7 @@
   <div class="col-md-5">
     <p>
       Напоминаем, что текущие цены акций различных компаний можно узнать <a href="/dashboard/GOOG">здесь</a>.
-      По всем вопросам: sutir2546@mail.ru
+      Спасибо за выбор нашего торгового бота!
     </p>
   </div>
 </div>
@@ -126,7 +126,7 @@
       <tr>
         <td>{{share.title}}</td>  
         <td>{{share.cost}}%</td>
-        <td>{{share.spend}}</td>
+        <td>{{share.spend}} р.</td>
       </tr>
   {% endfor %}
   </table>
@@ -138,14 +138,3 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
 </body>
 {% endblock body %} 
-
-
-<div class="container">
-  <h1 class="mt-5">Количество денег: {{MONEY}} USD</h1>
-  <h1 class="mt-5">Текущие акции в портфеле:</h1>
-  <ol>
-    {% for share in current_shares %}
-      <li><p>{{share.title}}: {{share.cost}} акций</p></li>
-    {% endfor %}
-  </ol>
-</div>
