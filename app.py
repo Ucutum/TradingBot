@@ -2,7 +2,8 @@ from flask import Flask, render_template, url_for, abort, redirect, request, fla
 from flask_login import LoginManager, login_user, current_user, logout_user, login_required
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'your_secret_key'
+with open("secret_key.txt", "r") as f:
+    app.config['SECRET_KEY'] = f.read()
 
 from data.db_session import create_session, global_init
 from data.users import User
