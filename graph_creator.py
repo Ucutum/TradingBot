@@ -47,7 +47,7 @@ def main():
     with open("all.csv") as f:
         companies = [e[1] for e in csv.reader(f, delimiter=";")]
     # companies = ["QIWI"]
-    companies = ["AMD"]
+    # companies = ["AMD"]
 
     for company in companies:
         if not os.path.exists(f"models/{company}_model.h5"):
