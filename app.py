@@ -160,7 +160,7 @@ def dashboard_page(company_token):
 
 def get_graphs_paths_alg():
     '''дает ссылки на графики прогы Артема'''
-    with open("all.csv") as f:
+    with open("all.csv", encoding='utf-8') as f:
         companies = [e for e in csv.reader(f, delimiter=";")]
     return list(filter(lambda x: x is not None, [(
             (i[0], f"graph/{i[1]}_alggraph.png") if
@@ -168,7 +168,7 @@ def get_graphs_paths_alg():
                         ) else None) for i in companies]))
 
 def get_graphs_paths():
-    with open("all.csv") as f:
+    with open("all.csv", encoding = "utf-8") as f:
         companies = [e for e in csv.reader(f, delimiter=";")]
     return list(filter(lambda x: x is not None, [(
             (i[0], f"graph/{i[1]}_graph.png") if
@@ -189,7 +189,7 @@ def futer_page():
 
     remove_trailing_empty_lines("gdata/Package_.txt")
 
-    with open("gdata/Package_.txt", "r", newline="") as f:
+    with open("gdata/Package_.txt", "r", newline="", encoding="utf-8") as f:
         lines = f.readlines()
         full_money = 0.0
         for item in lines:
