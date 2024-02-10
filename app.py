@@ -25,6 +25,9 @@ with open('settings.json', 'r') as f:
     settings = json.load(f)
 
 
+global_init("./db/database.db")
+
+
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
@@ -305,7 +308,7 @@ def cancel_subscription_page():
         return abort(403)
     return render_template('cancel_subscription_page.html')
 
-@app.route('/cover2', methods=['GET', 'POST'])
+@app.route('/subscription', methods=['GET', 'POST'])
 def cover2_page():
     if current_user.is_authenticated:
         if not current_user.subscription:
