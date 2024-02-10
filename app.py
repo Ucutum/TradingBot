@@ -7,8 +7,6 @@ with open("secret_key.txt", "r") as f:
 
 from data.db_session import create_session, global_init
 from data.users import User
-from data.stocks import Stock
-from data.companies import Company
 import os
 import csv
 import datetime
